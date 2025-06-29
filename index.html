@@ -46,7 +46,7 @@
 <body class="bg-gray-900 text-gray-300">
     <!-- PIN Auth Screen -->
     <div id="pin-screen" class="fixed inset-0 bg-gray-900/80 z-50 flex items-center justify-center">
-        <div class="bg-gray-800 p-8 rounded-lg shadow-2xl text-center border border-gray-700 w-full max-w-sm">
+        <div id="pin-box" class="bg-gray-800 p-8 rounded-lg shadow-2xl text-center border border-gray-700 w-full max-w-sm">
             <h2 class="text-2xl font-bold text-white mb-2">Enter PIN</h2>
             <p class="text-gray-400 mb-6">Enter the 6-digit PIN to access the hub.</p>
             <div id="pin-dots" class="flex justify-center space-x-3 mb-6">
@@ -198,6 +198,7 @@
         const appLoader = document.getElementById('app-loader');
         const pinDots = document.querySelectorAll('#pin-dots .pin-dot');
         const pinError = document.getElementById('pin-error');
+        const pinBox = document.getElementById('pin-box');
         const modal = document.getElementById('compound-modal');
         const modalContent = document.getElementById('modal-content');
         const modalTitle = document.getElementById('modal-title');
@@ -252,11 +253,11 @@
                 startApp();
             } else {
                 pinError.textContent = "Invalid PIN. Please try again.";
-                pinScreen.querySelector('div').classList.add('animate-shake');
+                pinBox.classList.add('animate-shake');
                 setTimeout(() => {
                     enteredPin = "";
                     updatePinDots();
-                    pinScreen.querySelector('div').classList.remove('animate-shake');
+                    pinBox.classList.remove('animate-shake');
                 }, 500);
             }
         }
