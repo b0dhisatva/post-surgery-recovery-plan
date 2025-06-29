@@ -190,7 +190,7 @@
             let checklistDocRef;
             let unsubscribe;
 
-            const correctPin = "102682"; // PIN has been updated
+            const correctPin = "102682";
             let enteredPin = "";
 
             const pinScreen = document.getElementById('pin-screen');
@@ -380,8 +380,7 @@
                 }
             }
             
-            // --- ALL OTHER INITIALIZATION FUNCTIONS (PROTOCOL VIEW, MODAL, ETC.) ---
-            function initializeProtocolView() { /* Same as before */ 
+            function initializeProtocolView() {
                  populateProtocolTables(); populateLibrary(); populateRiskTable(); setupProtocolEventListeners();
             }
             function populateProtocolTables() {
