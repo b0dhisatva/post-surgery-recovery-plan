@@ -1,0 +1,583 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Comprehensive Recovery Hub</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'gray-900': '#111827',
+                        'gray-800': '#1F2937',
+                        'gray-700': '#374151',
+                        'gray-600': '#4B5563',
+                        'gray-500': '#6B7280',
+                        'gray-400': '#9CA3AF',
+                        'gray-300': '#D1D5DB',
+                        'gray-200': '#E5E7EB',
+                        'blue-500': '#3B82F6',
+                        'blue-400': '#60A5FA',
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #111827; /* gray-900 */
+            color: #D1D5DB; /* gray-300 */
+        }
+        .main-tab {
+            transition: color 0.2s, border-bottom-color 0.2s;
+            border-bottom: 2px solid transparent;
+        }
+        .main-tab.active, .main-tab:hover {
+            color: #60A5FA; /* blue-400 */
+            border-bottom-color: #60A5FA;
+        }
+        .day-card {
+            border-left: 4px solid #3B82F6; /* blue-500 */
+        }
+        .day-card.phase-2 {
+            border-left-color: #10b981; /* emerald-500 */
+        }
+        .day-card.phase-3 {
+            border-left-color: #8b5cf6; /* violet-500 */
+        }
+        .checkbox-custom {
+            appearance: none;
+            -webkit-appearance: none;
+            height: 1.25rem;
+            width: 1.25rem;
+            border-radius: 0.25rem;
+            border: 2px solid #4B5563; /* gray-600 */
+            background-color: #374151; /* gray-700 */
+            cursor: pointer;
+            position: relative;
+            transition: background-color 0.2s, border-color 0.2s;
+        }
+        .checkbox-custom:checked {
+            background-color: #3B82F6; /* blue-500 */
+            border-color: #60A5FA; /* blue-400 */
+        }
+        .checkbox-custom:checked::after {
+            content: '✓';
+            position: absolute;
+            color: white;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 1rem;
+            font-weight: bold;
+        }
+        .progress-bar-bg {
+            background-color: #374151; /* gray-700 */
+        }
+        .progress-bar-fg {
+            background-color: #3B82F6; /* blue-500 */
+            transition: width 0.3s ease-in-out;
+        }
+        .phase-tab.active {
+            background-color: #3B82F6; /* blue-500 */
+            color: white;
+        }
+        .modal {
+            transition: opacity 0.25s ease, visibility 0.25s ease;
+        }
+        .modal-content {
+            transition: transform 0.25s ease;
+        }
+    </style>
+</head>
+<body class="bg-gray-900 text-gray-300">
+
+    <header class="bg-gray-800 shadow-lg sticky top-0 z-30">
+        <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center py-4">
+                <div>
+                    <h1 class="text-2xl md:text-3xl font-bold text-white">Comprehensive Recovery Hub</h1>
+                    <p class="text-sm text-gray-400">July 12, 2025 - September 30, 2025</p>
+                </div>
+                <nav class="flex items-center space-x-6 mt-4 sm:mt-0">
+                    <button data-tab="checklist" class="main-tab font-medium text-gray-300 px-1 py-2 text-base active">Daily Checklist</button>
+                    <button data-tab="protocol" class="main-tab font-medium text-gray-300 px-1 py-2 text-base">Full Protocol</button>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <main class="container mx-auto">
+        <div id="checklist-view" class="tab-content">
+             <div class="px-4 sm:px-6 lg:px-8 pt-6">
+                <div class="flex items-center space-x-4 text-sm text-gray-400">
+                    <div class="flex items-center"><div class="w-4 h-4 rounded-full bg-blue-500 mr-2"></div><span>Phase I</span></div>
+                    <div class="flex items-center"><div class="w-4 h-4 rounded-full bg-emerald-500 mr-2"></div><span>Phase II</span></div>
+                    <div class="flex items-center"><div class="w-4 h-4 rounded-full bg-violet-500 mr-2"></div><span>Phase III</span></div>
+                </div>
+            </div>
+            <div id="checklist-container" class="p-4 sm:p-6 lg:p-8 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+                <!-- Daily Cards will be generated here by JavaScript -->
+            </div>
+        </div>
+
+        <div id="protocol-view" class="tab-content hidden p-4 sm:p-6 lg:p-8">
+            <!-- Full Protocol View will be populated here -->
+             <section id="protocol" class="mb-16 scroll-mt-20">
+                <h2 class="text-3xl font-bold mb-2 text-white">Integrated Protocol Timeline</h2>
+                <p class="mb-6 text-gray-400 max-w-3xl">
+                    This section presents the core of your recovery plan. The protocol is divided into three phases, each corresponding to a critical stage of your body's natural wound healing process. Use the tabs below to navigate between phases.
+                </p>
+                <div class="mb-6">
+                    <div class="flex flex-wrap border-b border-gray-700">
+                        <button data-phase="phase1" class="phase-tab px-4 py-2 font-medium text-gray-300 hover:bg-gray-700 transition-colors duration-200 active">Phase I (Wk 1-2)</button>
+                        <button data-phase="phase2" class="phase-tab px-4 py-2 font-medium text-gray-300 hover:bg-gray-700 transition-colors duration-200">Phase II (Wk 3-6)</button>
+                        <button data-phase="phase3" class="phase-tab px-4 py-2 font-medium text-gray-300 hover:bg-gray-700 transition-colors duration-200">Phase III (Wk 7-11)</button>
+                    </div>
+                </div>
+
+                <div id="protocol-phase1" class="protocol-phase-content"></div>
+                <div id="protocol-phase2" class="protocol-phase-content hidden"></div>
+                <div id="protocol-phase3" class="protocol-phase-content hidden"></div>
+            </section>
+
+             <section id="library" class="mb-16 scroll-mt-20">
+                <h2 class="text-3xl font-bold mb-2 text-white">Compound Library</h2>
+                <p class="mb-6 text-gray-400 max-w-3xl">
+                    Explore the science behind your recovery protocol. This library contains detailed information on every compound, supplement, and therapy included in your plan. Click on any item for details.
+                </p>
+                <div id="library-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4"></div>
+            </section>
+
+             <section id="phases" class="mb-16 scroll-mt-20">
+                <h2 class="text-3xl font-bold mb-2 text-white">The 3 Phases of Healing</h2>
+                 <p class="mb-8 text-gray-400 max-w-3xl">
+                    Your protocol is strategically designed to provide the right support at the right time, aligning with your body's natural healing processes.
+                </p>
+                <div class="relative w-full">
+                    <div class="absolute left-0 top-1/2 w-full h-1 bg-gray-700 -translate-y-1/2"></div>
+                    <div class="relative flex justify-between items-start">
+                        <div class="w-1/3 text-center px-2">
+                            <div class="relative mb-2"><div class="w-4 h-4 rounded-full bg-blue-500 mx-auto ring-4 ring-gray-900"></div></div>
+                            <h3 class="font-bold text-blue-400">1. Inflammation</h3>
+                            <p class="text-xs text-gray-500 mb-2">Day 1 - 7</p><p class="text-xs text-gray-400">The body's first response. Controls bleeding and prevents infection. This phase cleans the wound site and calls in repair cells.</p>
+                        </div>
+                        <div class="w-1/3 text-center px-2">
+                            <div class="relative mb-2"><div class="w-4 h-4 rounded-full bg-emerald-500 mx-auto ring-4 ring-gray-900"></div></div>
+                            <h3 class="font-bold text-emerald-400">2. Proliferation</h3>
+                            <p class="text-xs text-gray-500 mb-2">Day 4 - Week 6</p><p class="text-xs text-gray-400">Focuses on rebuilding. New blood vessels form, and fibroblasts deposit collagen to create new tissue, filling the wound.</p>
+                        </div>
+                        <div class="w-1/3 text-center px-2">
+                            <div class="relative mb-2"><div class="w-4 h-4 rounded-full bg-violet-500 mx-auto ring-4 ring-gray-900"></div></div>
+                            <h3 class="font-bold text-violet-400">3. Remodeling</h3>
+                            <p class="text-xs text-gray-500 mb-2">Week 4+</p><p class="text-xs text-gray-400">The new tissue is reorganized and strengthened. Weaker collagen is replaced by a stronger type, and the scar matures and flattens.</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+             <section id="risks" class="scroll-mt-20">
+                <h2 class="text-3xl font-bold mb-2 text-white">Risk & Safety Center</h2>
+                 <p class="mb-6 text-gray-400 max-w-3xl">
+                    This section consolidates the critical risk information, regulatory status, and mandatory monitoring requirements for each substance. Review this information carefully.
+                </p>
+                <div class="bg-rose-900/50 border border-rose-500/30 text-rose-300 p-4 rounded-lg mb-6">
+                    <h3 class="font-bold text-rose-200">⚠️ Critical Disclaimer</h3>
+                    <p class="text-sm">This protocol is for informational purposes ONLY and does not constitute medical advice. Implementation must be done ONLY with the full consent and direct supervision of a qualified medical professional.</p>
+                </div>
+                <div class="bg-gray-800 p-4 sm:p-6 rounded-lg shadow-lg">
+                    <div class="overflow-x-auto">
+                        <table class="w-full table-auto text-left text-sm"><thead class="bg-gray-700/50 text-gray-300">
+                               <tr>
+                                    <th class="p-3 font-semibold">Compound</th><th class="p-3 font-semibold">FDA Status</th><th class="p-3 font-semibold">Primary Risks</th><th class="p-3 font-semibold">Monitoring / Contraindications</th>
+                                </tr></thead>
+                            <tbody id="risk-table" class="divide-y divide-gray-700"></tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <div id="compound-modal" class="modal invisible opacity-0 fixed inset-0 w-full h-full bg-black/80 flex items-center justify-center p-4 z-50">
+        <div id="modal-content" class="modal-content bg-gray-800 w-full max-w-2xl max-h-[90vh] rounded-lg shadow-xl border border-gray-700 transform scale-95 overflow-y-auto">
+            <div class="sticky top-0 bg-gray-800 p-4 border-b border-gray-700 flex justify-between items-center">
+                <h3 id="modal-title" class="text-2xl font-bold text-white"></h3>
+                <button id="modal-close" class="text-gray-400 hover:text-white text-3xl">&times;</button>
+            </div>
+            <div class="p-6">
+                <div id="modal-body"></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // --- DATA STORE ---
+        const appData = {
+            storageKey: 'recoveryChecklistProgress',
+            checklist: {
+                startDate: '2025-07-12',
+                endDate: '2025-09-30',
+                phases: [
+                    { name: "Phase I", start: 0, end: 13, class: 'day-card' },
+                    { name: "Phase II", start: 14, end: 41, class: 'phase-2' },
+                    { name: "Phase III", start: 42, end: 80, class: 'phase-3' }
+                ],
+                items: {
+                    "bpc-157": { key: "bpc-157", name: "BPC-157", dose: "400mcg", inj: "12 units", time: "AM", freq: "daily", phases: [1, 2, 3] },
+                    "bpc-157-pm": { key: "bpc-157", name: "BPC-157", dose: "400mcg", inj: "12 units", time: "PM", freq: "daily", phases: [1, 2, 3] },
+                    "tb-500": { key: "tb-500", name: "TB-500", dose: "1mg", inj: "60 units", time: "Any", freq: "daily", phases: [1, 2, 3] },
+                    "kpv": { key: "kpv", name: "KPV (Injectable)", dose: "400mcg", inj: "12 units", time: "AM", freq: "daily", phases: [1] },
+                    "kpv-pm": { key: "kpv", name: "KPV (Injectable)", dose: "400mcg", inj: "12 units", time: "PM", freq: "daily", phases: [1] },
+                    "oxandrolone": { key: "oxandrolone", name: "Oxandrolone", dose: "6.25mg", time: "AM", freq: "daily", phases: [1, 2, 3] },
+                    "oxandrolone-pm": { key: "oxandrolone", name: "Oxandrolone", dose: "6.25mg", time: "PM", freq: "daily", phases: [1, 2, 3] },
+                    "collagen": { key: "collagen", name: "Multi-Collagen Powder", dose: "15g", time: "AM", freq: "daily", phases: [1, 2, 3] },
+                    "collagen-pm": { key: "collagen", name: "Multi-Collagen Powder", dose: "15g", time: "PM", freq: "daily", phases: [1, 2, 3] },
+                    "vit-c": { key: "vit-c", name: "Vitamin C", dose: "1g", time: "AM Meal", freq: "daily", phases: [1, 2, 3] },
+                    "vit-c-pm": { key: "vit-c", name: "Vitamin C", dose: "1g", time: "PM Meal", freq: "daily", phases: [1, 2, 3] },
+                    "vit-d": { key: "vit-d", name: "Vitamin D3", dose: "5,000 IU", time: "With Meal", freq: "daily", phases: [1, 2, 3] },
+                    "ha-oral": { key: "ha", name: "Hyaluronic Acid (Oral)", dose: "200mg", time: "Any", freq: "daily", phases: [1, 2, 3] },
+                    "ghk-cu": { key: "ghk-cu", name: "GHK-Cu (Injectable)", dose: "1mg", inj: "4 units", time: "PM", freq: "daily", phases: [2, 3] },
+                    "hgh": { key: "hgh", name: "HGH", dose: "1.5 IU", inj: "11 units", time: "AM", freq: "daily", phases: [2, 3] },
+                    "hgh-pm": { key: "hgh", name: "HGH", dose: "1.5 IU", inj: "11 units", time: "PM", freq: "daily", phases: [2, 3] },
+                    "rlt": { key: "rlt", name: "Red Light Therapy", dose: "10-15 min", time: "Any", freq: "eod", phases: [2, 3] },
+                    "retatrutide-p2": { key: "retatrutide", name: "Retatrutide", dose: "2mg", inj: "60 units", time: "Any", freq: "weekly", phases: [2], startWeek: 3 },
+                    "retatrutide-p3": { key: "retatrutide", name: "Retatrutide", dose: "4mg", inj: "120 units (split)", time: "Any", freq: "weekly", phases: [3] }
+                }
+            },
+            protocol: {
+            "bpc-157": { name: "BPC-157", category: "Peptide", status: "research", info: { summary: 'A synthetic peptide derived from a protein in gastric juice, known for its potent, localized tissue-regenerative properties.', mechanism: 'Primarily works by promoting angiogenesis (new blood vessel formation), which enhances delivery of oxygen and nutrients to the wound. It also stimulates the migration and proliferation of fibroblasts, the cells responsible for producing collagen.', notes: 'Subcutaneous injection near (but not in) incisions is the most effective method for localized skin healing. Its expression of growth hormone receptors may amplify the effects of HGH.' }, phases: { phase1: { dosage: "400 mcg (800mcg/day)", freq: "Twice Daily", time: "Morning & Evening", injectionAmount: "12 units" }, phase2: { dosage: "400 mcg (800mcg/day)", freq: "Twice Daily", time: "Morning & Evening", injectionAmount: "12 units" }, phase3: { dosage: "400 mcg (800mcg/day)", freq: "Twice Daily", time: "Morning & Evening", injectionAmount: "12 units" } }, risk: { status: "Unapproved drug; not for human use.", primary: "Lack of long-term human safety data; significant sourcing risks (purity, contaminants). Reported side effects are generally mild: nausea, fatigue, dizziness.", monitoring: "Unknown long-term effects." } },
+            "tb-500": { name: "TB-500", category: "Peptide", status: "research", info: { summary: 'The synthetic form of Thymosin Beta-4 (Tβ4), a naturally occurring peptide that promotes systemic (whole-body) repair.', mechanism: 'Upregulates a cellular building block called actin, which is fundamental to cell migration, differentiation, and proliferation. It acts as a system-wide signal to attract repair cells to injury sites. Also promotes angiogenesis and has anti-inflammatory properties.', notes: 'Administered subcutaneously. A consistent daily dose provides steady systemic levels for ongoing support.' }, phases: { phase1: { dosage: "1.0 mg", freq: "Once Daily", time: "Any", injectionAmount: "60 units" }, phase2: { dosage: "1.0 mg", freq: "Once Daily", time: "Any", injectionAmount: "60 units" }, phase3: { dosage: "1.0 mg", freq: "Once Daily", time: "Any", injectionAmount: "60 units" } }, risk: { status: "Unapproved drug; not for human use.", primary: "Lack of long-term human safety data. Its potent angiogenic properties mean it could theoretically promote tumor growth.", monitoring: "Contraindicated in individuals with a history of or active cancer." } },
+            "ghk-cu": { name: "GHK-Cu (Injectable)", category: "Peptide", status: "research", info: { summary: 'A naturally occurring copper peptide complex that plays a key role in dermal remodeling. Injectable form provides systemic support for tissue regeneration.', mechanism: 'Regulates the synthesis and breakdown of extracellular matrix (ECM) components. It stimulates production of healthy collagen and elastin while also helping to remove damaged proteins and disorganized scar tissue. It can also modulate gene expression, shifting cells towards a more regenerative state.', notes: 'Introduced in Phase II, once the initial inflammatory phase has subsided, to guide the remodeling process. Systemic administration supports widespread tissue health.' }, phases: { phase2: { dosage: "1.0 mg", freq: "Once Daily", time: "Evening", injectionAmount: "4 units" }, phase3: { dosage: "1.0 mg", freq: "Once Daily", time: "Evening", injectionAmount: "4 units" } }, risk: { status: "Unapproved drug; not for human use.", primary: "Lack of human safety data. Potential for injection site reactions, flushing, or nausea. Systemic copper administration carries risks.", monitoring: "Contraindicated in individuals with copper metabolism disorders (e.g., Wilson's disease)." } },
+            "kpv": { name: "KPV (Injectable)", category: "Peptide", status: "research", info: { summary: 'A tripeptide fragment of α-MSH, it is one of the most potent anti-inflammatory peptides known, used here to precisely control the initial post-surgical inflammatory cascade.', mechanism: 'Acts intracellularly to inhibit key inflammatory signaling pathways (like NF-κB). This prevents the over-production of pro-inflammatory cytokines, allowing for necessary inflammation without causing excessive pain, swelling, or collateral tissue damage. It also has antimicrobial properties.', notes: 'Administered via subcutaneous injection for systemic anti-inflammatory benefits. It is introduced immediately post-op to manage Phase I healing.' }, phases: { phase1: { dosage: "400 mcg (800mcg/day)", freq: "Twice Daily", time: "Morning & Evening", injectionAmount: "12 units" } }, risk: { status: "Unapproved peptide; not for human use.", primary: "Lack of human safety data. Reported side effects are typically mild, such as minor GI or skin reactions.", monitoring: "Unknown long-term effects." } },
+            "hgh": { name: "HGH", category: "Hormone", status: "prescription", info: { summary: 'Human Growth Hormone (somatropin) is a master regenerative hormone that creates a powerful systemic drive towards healing.', mechanism: 'Stimulates production of IGF-1, which in turn drives cell growth, repair, and proliferation throughout the body. It is a potent stimulator of collagen synthesis, providing the raw material for strong new tissue.', notes: 'Introduced in Phase II once the acute critical phase of surgery is over. Splitting the dose into AM/PM injections can help maintain more stable levels and may reduce side effects.' }, phases: { phase2: { dosage: "1.5 IU (3 IU/day)", freq: "Twice Daily", time: "Morning & Evening", injectionAmount: "11 units" }, phase3: { dosage: "1.5 IU (3 IU/day)", freq: "Twice Daily", time: "Morning & Evening", injectionAmount: "11 units" } }, risk: { status: "Prescription drug. Off-label distribution is illegal.", primary: "Edema (fluid retention), arthralgia (joint pain), carpal tunnel syndrome, impaired glucose tolerance.", monitoring: "Contraindicated in acute critical illness post-surgery and in active cancer. Must be prescribed and monitored by a physician." } },
+            "retatrutide": { name: "Retatrutide", category: "Peptide", status: "experimental", info: { summary: 'A novel, experimental triple-receptor agonist peptide (GLP-1, GIP, glucagon) for profound metabolic optimization and inflammation control.', mechanism: 'By improving insulin sensitivity, lipid profiles, and blood pressure, it ensures energy is partitioned effectively towards tissue repair. It also lowers systemic inflammation, creating an ideal internal environment for healing.', notes: 'Highly experimental. Protocol introduces it at 2mg/wk (late Phase II), increasing to 4mg/wk (Phase III). The 4mg dose exceeds a single 1mL syringe capacity and must be split into two separate injections. Inclusion is speculative and contingent on future availability.' }, phases: { phase2: { dosage: "2 mg", freq: "Weekly (starting Wk 3)", time: "Any", injectionAmount: "60 units" }, phase3: { dosage: "4 mg", freq: "Weekly", time: "Any", injectionAmount: "120 units (split inj.)" } }, risk: { status: "Investigational new drug (in clinical trials).", primary: "Common side effects in trials include nausea and other GI issues. Long-term safety is unknown.", monitoring: "Not legally available for use outside of sanctioned clinical trials." } },
+            "oxandrolone": { name: "Oxandrolone", category: "Anabolic Agent", status: "prescription-c", info: { summary: 'An oral anabolic-androgenic steroid (AAS) with a highly favorable anabolic profile, used to aggressively counteract the catabolic (tissue breakdown) state induced by surgical trauma.', mechanism: 'Directly stimulates protein synthesis and inhibits protein breakdown, leading to a positive nitrogen balance essential for preserving and rebuilding lean body mass. Clinical studies in trauma patients show it accelerates wound healing.', notes: 'A Schedule III controlled substance. The total daily dose of 12.5mg is split to maintain stable blood levels.' }, phases: { phase1: { dosage: "6.25 mg (12.5mg/day)", freq: "Twice Daily", time: "Morning & Evening", injectionAmount: "—" }, phase2: { dosage: "6.25 mg (12.5mg/day)", freq: "Twice Daily", time: "Morning & Evening", injectionAmount: "—" }, phase3: { dosage: "6.25 mg (12.5mg/day)", freq: "Twice Daily", time: "Morning & Evening", injectionAmount: "—" } }, risk: { status: "Schedule III prescription drug.", primary: "Hepatotoxicity (liver damage) and severe dyslipidemia (adverse changes in cholesterol).", monitoring: "MANDATORY bloodwork to monitor liver enzymes (AST/ALT) and a full lipid panel is required before, during, and after the cycle." } },
+            "collagen": { name: "Multi-Collagen Powder", category: "Supplement", status: "supplement", info: { summary: 'Provides the direct raw materials (amino acids like glycine, proline) needed for the body to construct its own new collagen.', mechanism: 'Supplies the specific building blocks for Type I and Type III collagen, the predominant types in the skin, supporting the formation of a strong, healthy dermal matrix.', notes: 'Use a hydrolyzed powder for best absorption. The 30g daily dose is split to improve absorption and provide a steady supply of amino acids.' }, phases: { phase1: { dosage: "15 g (30g/day)", freq: "Twice Daily", time: "Morning & Evening", injectionAmount: "—" }, phase2: { dosage: "15 g (30g/day)", freq: "Twice Daily", time: "Morning & Evening", injectionAmount: "—" }, phase3: { dosage: "15 g (30g/day)", freq: "Twice Daily", time: "Morning & Evening", injectionAmount: "—" } }, risk: { status: "Supplement (GRAS)", primary: "Generally very low risk.", monitoring: "Follow recommended dosage." } },
+            "vit-c": { name: "Vitamin C", category: "Supplement", status: "supplement", info: { summary: 'An essential cofactor for the enzymes that create stable, strong collagen. It is also a potent antioxidant.', mechanism: 'Without adequate Vitamin C, the body cannot form functional collagen, leading to impaired wound healing. It is a non-negotiable component of tissue repair.', notes: 'A high therapeutic dose is warranted post-surgery due to the high demand for collagen synthesis. Take in divided doses.' }, phases: { phase1: { dosage: "1 g (2g/day)", freq: "Twice Daily", time: "With Meals", injectionAmount: "—" }, phase2: { dosage: "1 g (2g/day)", freq: "Twice Daily", time: "With Meals", injectionAmount: "—" }, phase3: { dosage: "1 g (2g/day)", freq: "Twice Daily", time: "With Meals", injectionAmount: "—" } }, risk: { status: "Supplement (GRAS)", primary: "Generally low risk; very high doses can cause GI upset.", monitoring: "Follow recommended dosage." } },
+            "vit-d": { name: "Vitamin D3", category: "Supplement", status: "supplement", info: { summary: 'A critical modulator of the immune system and cellular function, essential for healthy healing.', mechanism: 'Helps regulate the proliferation and differentiation of cells in all phases of healing. Deficiency is linked to poorer surgical outcomes.', notes: 'The ideal dosage should be guided by pre-operative blood testing to correct any existing deficiency.' }, phases: { phase1: { dosage: "5,000 IU", freq: "Once Daily", time: "With Meal", injectionAmount: "—" }, phase2: { dosage: "5,000 IU", freq: "Once Daily", time: "With Meal", injectionAmount: "—" }, phase3: { dosage: "5,000 IU", freq: "Once Daily", time: "With Meal", injectionAmount: "—" } }, risk: { status: "Supplement (GRAS)", primary: "Low risk at this dose; toxicity is possible at extremely high, prolonged doses.", monitoring: "Follow recommended dosage." } },
+            "ha": { name: "Hyaluronic Acid (Oral)", category: "Supplement", status: "supplement", info: { summary: 'A major component of the skin\'s extracellular matrix, responsible for hydration, lubrication, and volume.', mechanism: 'Plays an active role in all phases of healing by providing structural support and facilitating cell migration. Oral supplementation supports systemic hydration and tissue quality from within.', notes: 'Can also be applied topically in a serum for additional benefit.' }, phases: { phase1: { dosage: "200 mg", freq: "Once Daily", time: "Any", injectionAmount: "—" }, phase2: { dosage: "200 mg", freq: "Once Daily", time: "Any", injectionAmount: "—" }, phase3: { dosage: "200 mg", freq: "Once Daily", time: "Any", injectionAmount: "—" } }, risk: { status: "Supplement (GRAS)", primary: "Generally very low risk.", monitoring: "Follow recommended dosage." } },
+            "rlt": { name: "Red Light Therapy", category: "Therapy", status: "device", info: { summary: 'A biophysical therapy that uses specific wavelengths of light to stimulate cellular processes non-invasively, acting as a powerful catalyst for healing.', mechanism: 'Light photons are absorbed by mitochondria, which boosts the production of ATP (cellular energy). This extra energy powers all healing processes, including cell proliferation, collagen synthesis, and angiogenesis, while also reducing inflammation.', notes: 'Use a device that provides both red (630-660nm) and near-infrared (810-850nm) wavelengths. Start after initial dressings are removed.' }, phases: { phase2: { dosage: "10-15 min session", freq: "Daily or Every Other Day", time: "Any", injectionAmount: "—" }, phase3: { dosage: "10-15 min session", freq: "Daily or Every Other Day", time: "Any", injectionAmount: "—" } }, risk: { status: "FDA-cleared devices exist", primary: "Low risk; potential for skin irritation or eye damage without protection.", monitoring: "Use appropriate eye protection." } }
+            }
+        };
+
+        // --- DOM Elements ---
+        const checklistContainer = document.getElementById('checklist-container');
+        const mainTabs = document.querySelectorAll('.main-tab');
+        const tabContents = document.querySelectorAll('.tab-content');
+        const modal = document.getElementById('compound-modal');
+        const modalContent = document.getElementById('modal-content');
+        const modalTitle = document.getElementById('modal-title');
+        const modalBody = document.getElementById('modal-body');
+        const modalClose = document.getElementById('modal-close');
+
+        // --- LOCAL STORAGE FUNCTIONS ---
+        function getSavedProgress() {
+            try {
+                const saved = localStorage.getItem(appData.storageKey);
+                return saved ? JSON.parse(saved) : {};
+            } catch (e) {
+                console.error("Could not parse saved progress.", e);
+                return {};
+            }
+        }
+
+        function saveProgress(id, isChecked) {
+            const progress = getSavedProgress();
+            progress[id] = isChecked;
+            localStorage.setItem(appData.storageKey, JSON.stringify(progress));
+        }
+
+        // --- UI UPDATE FUNCTIONS ---
+        function updateDayProgress(dayCard) {
+            const checkboxes = dayCard.querySelectorAll('input[type="checkbox"]');
+            const progressBar = dayCard.querySelector('.progress-bar-fg');
+            if (!progressBar) return;
+
+            const totalCheckboxes = checkboxes.length;
+            const checkedCount = dayCard.querySelectorAll('input[type="checkbox"]:checked').length;
+            const progressPercentage = totalCheckboxes > 0 ? (checkedCount / totalCheckboxes) * 100 : 0;
+            progressBar.style.width = `${progressPercentage}%`;
+        }
+
+        // --- CHECKLIST VIEW LOGIC ---
+        function initializeChecklist() {
+            const savedProgress = getSavedProgress();
+            const { startDate: start, endDate: end, phases, items } = appData.checklist;
+            const startDate = new Date(start + 'T00:00:00');
+            const endDate = new Date(end + 'T00:00:00');
+
+            let currentDate = new Date(startDate);
+            let dayCounter = 0;
+            let dayOfWeekCounter = currentDate.getDay();
+
+            while (currentDate <= endDate) {
+                const dayIndex = dayCounter;
+                const currentPhaseInfo = phases.find(p => dayIndex >= p.start && dayIndex <= p.end);
+                const currentPhaseNumber = phases.indexOf(currentPhaseInfo) + 1;
+
+                const dayCard = document.createElement('div');
+                dayCard.className = `day-card ${currentPhaseInfo.class} bg-gray-800 rounded-lg shadow-lg p-4 flex flex-col`;
+                dayCard.id = `day-${dayIndex}`;
+
+                const dateString = currentDate.toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric' });
+                
+                let itemsForDay = [];
+                for (const key in items) {
+                    const item = items[key];
+                    if (item.phases.includes(currentPhaseNumber)) {
+                        let shouldAdd = false;
+                        if(item.freq === 'daily') {
+                           shouldAdd = true;
+                        } else if (item.freq === 'eod' && dayIndex % 2 === 0) {
+                            shouldAdd = true;
+                        } else if (item.freq === 'weekly' && dayOfWeekCounter % 7 === 0) {
+                            if(item.startWeek) {
+                                const phaseStartDate = new Date(start);
+                                phaseStartDate.setDate(phaseStartDate.getDate() + currentPhaseInfo.start);
+                                const itemStartDate = new Date(phaseStartDate);
+                                itemStartDate.setDate(itemStartDate.getDate() + (item.startWeek - 1) * 7);
+                                if(currentDate >= itemStartDate) {
+                                    shouldAdd = true;
+                                }
+                            } else {
+                                shouldAdd = true;
+                            }
+                        }
+                        if(shouldAdd) itemsForDay.push({ ...item, checklistKey: key });
+                    }
+                }
+
+                let checklistHTML = itemsForDay.map(item => {
+                    const id = `check-${dayIndex}-${item.checklistKey}`;
+                    const isChecked = savedProgress[id] ? 'checked' : '';
+                    const injText = item.inj ? `<span class="font-mono text-xs text-blue-400">${item.inj}</span>` : '';
+                    return `
+                        <div class="flex items-center justify-between py-2 border-b border-gray-700 last:border-b-0">
+                            <label for="${id}" class="flex items-center cursor-pointer flex-grow mr-2">
+                                <input type="checkbox" id="${id}" class="checkbox-custom mr-3 flex-shrink-0" ${isChecked}>
+                                <div class="min-w-0">
+                                    <span class="font-medium text-gray-200">${item.name}</span>
+                                    <span class="text-sm text-gray-400 ml-2">${item.dose}</span>
+                                </div>
+                            </label>
+                            ${injText}
+                            <span class="text-sm text-gray-500 ml-auto pl-2 text-right">${item.time}</span>
+                        </div>
+                    `;
+                }).join('');
+
+                dayCard.innerHTML = `
+                    <div class="flex justify-between items-center mb-2">
+                        <h3 class="font-bold text-lg text-white">${dateString}</h3>
+                        <span class="text-xs font-semibold px-2 py-1 rounded-full ${currentPhaseInfo.class === 'day-card' ? 'bg-blue-500/20 text-blue-300' : currentPhaseInfo.class === 'phase-2' ? 'bg-emerald-500/20 text-emerald-300' : 'bg-violet-500/20 text-violet-300'}">${currentPhaseInfo.name}</span>
+                    </div>
+                    <div class="flex-grow">
+                        ${checklistHTML || '<p class="text-gray-500 text-sm py-2">Rest day from scheduled therapies.</p>'}
+                    </div>
+                    <div class="mt-4">
+                        <div class="progress-bar-bg w-full h-2 rounded-full overflow-hidden">
+                            <div class="progress-bar-fg h-full" style="width: 0%;"></div>
+                        </div>
+                    </div>
+                `;
+
+                checklistContainer.appendChild(dayCard);
+                
+                updateDayProgress(dayCard);
+
+                const checkboxes = dayCard.querySelectorAll('input[type="checkbox"]');
+                checkboxes.forEach(checkbox => {
+                    checkbox.addEventListener('change', (e) => {
+                        saveProgress(e.target.id, e.target.checked);
+                        updateDayProgress(dayCard);
+                    });
+                });
+                
+                currentDate.setDate(currentDate.getDate() + 1);
+                dayCounter++;
+                dayOfWeekCounter++;
+            }
+        }
+
+        // --- FULL PROTOCOL VIEW LOGIC ---
+        function initializeProtocolView() {
+            populateProtocolTables();
+            populateLibrary();
+            populateRiskTable();
+            setupProtocolEventListeners();
+        }
+
+        function populateProtocolTables() {
+            const { protocol } = appData;
+            const phaseContainers = {
+                phase1: document.getElementById('protocol-phase1'),
+                phase2: document.getElementById('protocol-phase2'),
+                phase3: document.getElementById('protocol-phase3'),
+            };
+
+            for (const phase in phaseContainers) {
+                let tableRowsHTML = '';
+                for (const key in protocol) {
+                    const compound = protocol[key];
+                    if (compound.phases[phase]) {
+                        const pData = compound.phases[phase];
+                        tableRowsHTML += `
+                            <tr class="hover:bg-gray-700/50">
+                                <td class="p-3 font-medium"><button data-key="${key}" class="compound-link text-blue-400 hover:text-blue-300 hover:underline">${compound.name}</button></td>
+                                <td class="p-3 text-gray-300">${pData.dosage}</td>
+                                <td class="p-3 text-gray-300">${pData.freq}</td>
+                                <td class="p-3 text-gray-300">${pData.time}</td>
+                                <td class="p-3 text-gray-300 font-mono">${pData.injectionAmount || '—'}</td>
+                            </tr>
+                        `;
+                    }
+                }
+
+                phaseContainers[phase].innerHTML = `
+                    <div class="bg-gray-800 p-4 sm:p-6 rounded-lg shadow-lg">
+                        <div class="overflow-x-auto">
+                            <table class="w-full table-auto text-left text-sm">
+                                <thead class="bg-gray-700/50 text-gray-300">
+                                    <tr>
+                                        <th class="p-3 font-semibold">Compound</th>
+                                        <th class="p-3 font-semibold">Dosage</th>
+                                        <th class="p-3 font-semibold">Frequency</th>
+                                        <th class="p-3 font-semibold">Time of Day</th>
+                                        <th class="p-3 font-semibold">Inj. Amount (units)</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="divide-y divide-gray-700">${tableRowsHTML}</tbody>
+                            </table>
+                        </div>
+                    </div>
+                `;
+            }
+        }
+        
+        function populateLibrary() {
+            const libraryGrid = document.getElementById('library-grid');
+            libraryGrid.innerHTML = '';
+            for (const key in appData.protocol) {
+                const compound = appData.protocol[key];
+                const statusStyles = {
+                    research: { icon: '🔬', bg: 'bg-blue-500/20', text: 'text-blue-300' },
+                    experimental: { icon: '🧪', bg: 'bg-purple-500/20', text: 'text-purple-300' },
+                    prescription: { icon: '💊', bg: 'bg-green-500/20', text: 'text-green-300' },
+                    'prescription-c': { icon: '⚠️', bg: 'bg-red-500/20', text: 'text-red-300' },
+                    supplement: { icon: '🌿', bg: 'bg-emerald-500/20', text: 'text-emerald-300' },
+                    device: { icon: '💡', bg: 'bg-gray-500/20', text: 'text-gray-300' }
+                };
+                const style = statusStyles[compound.status] || statusStyles['device'];
+
+                const card = `
+                    <button data-key="${key}" class="compound-link text-left w-full h-full bg-gray-800 p-4 rounded-lg shadow-lg hover:shadow-xl hover:bg-gray-700/50 transition-all duration-200 flex flex-col justify-between border border-gray-700">
+                        <div>
+                            <h4 class="font-bold text-white">${compound.name}</h4>
+                            <p class="text-xs text-gray-400 mb-2">${compound.category}</p>
+                            <p class="text-sm text-gray-300">${compound.info.summary}</p>
+                        </div>
+                        <div class="mt-3">
+                            <span class="text-xs font-semibold px-2 py-1 rounded-full ${style.bg} ${style.text}">${style.icon} ${compound.status.replace('-c', ' (Controlled)')}</span>
+                        </div>
+                    </button>
+                `;
+                libraryGrid.innerHTML += card;
+            }
+        }
+        
+        function populateRiskTable() {
+            const riskTableBody = document.getElementById('risk-table');
+            riskTableBody.innerHTML = '';
+            for (const key in appData.protocol) {
+                const compound = appData.protocol[key];
+                if (!compound.risk) continue;
+                
+                let nameCellClass = "text-gray-200";
+                if(compound.status === 'prescription-c') nameCellClass = "text-red-400 font-bold";
+                if(compound.status === 'research' || compound.status === 'experimental') nameCellClass = "text-blue-400 font-semibold";
+
+                const row = `
+                    <tr class="hover:bg-gray-700/50">
+                        <td class="p-3 font-medium ${nameCellClass}">${compound.name}</td>
+                        <td class="p-3 text-gray-300">${compound.risk.status}</td>
+                        <td class="p-3 text-gray-300">${compound.risk.primary}</td>
+                        <td class="p-3 text-gray-300">${compound.risk.monitoring}</td>
+                    </tr>
+                `;
+                riskTableBody.innerHTML += row;
+            }
+        }
+
+        function openModal(key) {
+            const compound = appData.protocol[key];
+            modalTitle.textContent = compound.name;
+            let notesHtml = compound.info.notes ? `<div class="mt-4 p-3 bg-blue-500/10 border border-blue-500/30 rounded-md"><h5 class="font-semibold text-blue-300">Key Notes</h5><p class="text-sm text-blue-300/80">${compound.info.notes}</p></div>` : '';
+            modalBody.innerHTML = `
+                <p class="text-gray-300 mb-4">${compound.info.summary}</p>
+                <h4 class="font-bold text-lg text-white mb-2">Mechanism of Action</h4>
+                <p class="text-gray-300">${compound.info.mechanism}</p>
+                ${notesHtml}
+            `;
+            modal.classList.remove('invisible', 'opacity-0');
+            modalContent.classList.remove('scale-95');
+        }
+
+        function closeModal() {
+            modal.classList.add('invisible', 'opacity-0');
+            modalContent.classList.add('scale-95');
+        }
+
+        function setupProtocolEventListeners() {
+            const phaseTabs = document.querySelectorAll('.phase-tab');
+            const phaseContents = document.querySelectorAll('.protocol-phase-content');
+            phaseTabs.forEach(tab => {
+                tab.addEventListener('click', () => {
+                    phaseTabs.forEach(t => t.classList.remove('active'));
+                    tab.classList.add('active');
+                    phaseContents.forEach(content => content.classList.add('hidden'));
+                    document.getElementById(`protocol-${tab.dataset.phase}`).classList.remove('hidden');
+                });
+            });
+
+            document.querySelectorAll('#protocol-view .compound-link').forEach(link => {
+                link.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    openModal(link.dataset.key);
+                });
+            });
+        }
+        
+        // --- GENERAL APP LOGIC ---
+        function handleTabSwitching() {
+            mainTabs.forEach(tab => {
+                tab.addEventListener('click', () => {
+                    mainTabs.forEach(t => t.classList.remove('active'));
+                    tab.classList.add('active');
+                    
+                    tabContents.forEach(content => content.classList.add('hidden'));
+                    document.getElementById(`${tab.dataset.tab}-view`).classList.remove('hidden');
+                });
+            });
+        }
+
+        // Modal close events
+        modalClose.addEventListener('click', closeModal);
+        modal.addEventListener('click', (e) => { if (e.target === modal) closeModal(); });
+        document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeModal(); });
+        
+        // --- INITIALIZATION ---
+        initializeChecklist();
+        initializeProtocolView();
+        handleTabSwitching();
+    });
+    </script>
+</body>
+</html>
