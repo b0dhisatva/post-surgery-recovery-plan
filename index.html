@@ -147,6 +147,7 @@
     <!-- Firebase SDK -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/11.9.1/firebase-app.js";
+        import { getAnalytics } from "https://www.gstatic.com/firebasejs/11.9.1/firebase-analytics.js";
         import { getFirestore, doc, setDoc, onSnapshot } from "https://www.gstatic.com/firebasejs/11.9.1/firebase-firestore.js";
 
         document.addEventListener('DOMContentLoaded', () => {
@@ -154,7 +155,7 @@
                 apiKey: "AIzaSyBvOuLfBr1-faAK7RC5QkgD6hxhD9oWaP0",
                 authDomain: "post-surgery-recovery-plan.firebaseapp.com",
                 projectId: "post-surgery-recovery-plan",
-                storageBucket: "post-surgery-recovery-plan.appspot.com",
+                storageBucket: "post-surgery-recovery-plan.firebasestorage.app",
                 messagingSenderId: "640490803020",
                 appId: "1:640490803020:web:07a9a0322792daff0d89e9",
                 measurementId: "G-R4BG49JC7N"
@@ -191,6 +192,7 @@
                     return;
                 }
                 const app = initializeApp(firebaseConfig);
+                const analytics = getAnalytics(app);
                 db = getFirestore(app);
                 checklistDocRef = doc(db, "recoveryState", "checklist");
                 logsDocRef = doc(db, "recoveryState", "logs");
