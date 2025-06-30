@@ -13,25 +13,31 @@
             theme: {
                 extend: {
                     colors: {
-                        'gray-900': '#111827', 'gray-800': '#1F2937', 'gray-700': '#374151',
-                        'gray-600': '#4B5563', 'gray-500': '#6B7280', 'gray-400': '#9CA3AF',
-                        'gray-300': '#D1D5DB', 'gray-200': '#E5E7EB', 'blue-500': '#3B82F6',
-                        'blue-400': '#60A5FA',
+                        'gray-900': '#0a0a0a',
+                        'gray-800': '#1a1a1a',
+                        'gray-700': '#2a2a2a',
+                        'gray-600': '#3a3a3a',
+                        'gray-500': '#4a4a4a',
+                        'gray-400': '#6a6a6a',
+                        'gray-300': '#8a8a8a',
+                        'gray-200': '#b0b0b0',
+                        'blue-500': '#1a73e8',
+                        'blue-400': '#4285f4',
                     }
                 }
             }
         }
     </script>
     <style>
-        body { font-family: 'Inter', sans-serif; background-color: #111827; color: #D1D5DB; }
-        .main-tab.active, .main-tab:hover { color: #60A5FA; border-bottom-color: #60A5FA; }
+        body { font-family: 'Inter', sans-serif; background-color: #0a0a0a; color: #b0b0b0; }
+        .main-tab.active, .main-tab:hover { color: #4285f4; border-bottom-color: #4285f4; }
         .main-tab { transition: color 0.2s, border-bottom-color 0.2s; border-bottom: 2px solid transparent; }
-        .day-card { border-left: 4px solid #3B82F6; }
-        .checkbox-custom { appearance: none; -webkit-appearance: none; height: 1.25rem; width: 1.25rem; border-radius: 0.25rem; border: 2px solid #4B5563; background-color: #374151; cursor: pointer; position: relative; transition: background-color 0.2s, border-color 0.2s; }
-        .checkbox-custom:checked { background-color: #3B82F6; border-color: #60A5FA; }
+        .day-card { border-left: 4px solid #1a73e8; background-color: #1a1a1a; }
+        .checkbox-custom { appearance: none; -webkit-appearance: none; height: 1.25rem; width: 1.25rem; border-radius: 0.25rem; border: 2px solid #4a4a4a; background-color: #2a2a2a; cursor: pointer; position: relative; transition: background-color 0.2s, border-color 0.2s; }
+        .checkbox-custom:checked { background-color: #1a73e8; border-color: #4285f4; }
         .checkbox-custom:checked::after { content: '✓'; position: absolute; color: white; top: 50%; left: 50%; transform: translate(-50%, -50%); font-size: 1rem; font-weight: bold; }
-        .progress-bar-bg { background-color: #374151; }
-        .progress-bar-fg { background-color: #3B82F6; transition: width 0.3s ease-in-out; }
+        .progress-bar-bg { background-color: #3a3a3a; }
+        .progress-bar-fg { background-color: #1a73e8; transition: width 0.3s ease-in-out; }
         .modal { transition: opacity 0.25s ease, visibility 0.25s ease; }
         .modal-content { transition: transform 0.25s ease; }
         #app-loader { transition: opacity 0.3s ease-in-out; }
@@ -42,7 +48,7 @@
         .log-entry-form.open { max-height: 500px; padding-top: 1rem; padding-bottom: 1rem; }
     </style>
 </head>
-<body class="bg-gray-900 text-gray-300">
+<body class="bg-gray-900 text-gray-200">
     
     <!-- App Loader -->
     <div id="app-loader" class="fixed inset-0 bg-gray-900 z-50 flex flex-col items-center justify-center">
@@ -58,7 +64,7 @@
                     <div>
                         <div class="flex items-center space-x-2">
                             <svg class="w-8 h-8 text-blue-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                <circle cx="12" cy="12" r="10" />
+                                <circle cx="12" cy="12 sutra" r="10" />
                                 <path d="M8 12l2 2 4-4" />
                             </svg>
                             <h1 class="text-2xl md:text-3xl font-bold text-white">David's Recovery Hub</h1>
@@ -85,8 +91,7 @@
 
             <div id="protocol-view" class="tab-content hidden p-4 sm:p-6 lg:p-8">
                 <section id="protocol" class="mb-16 scroll-mt-20">
-                    <h2 class="text-3xl font-bold mb-2 text-white">Unified Protocol Timeline</h2>
-                    <p class="mb-6 text-gray-400 max-w-3xl">This section presents the core of your recovery plan for the entire period from July 21, 2025, to September 30, 2025.</p>
+                    <h2 class="text-3xl font-bold mb-2 text-white">Protocol</h2>
                     <div class="flex items-center space-x-4 text-sm text-gray-400 mb-4">
                         <div class="flex items-center"><div class="w-1 h-4 bg-emerald-500 mr-2"></div><span>Injectable</span></div>
                         <div class="flex items-center"><div class="w-1 h-4 bg-blue-500 mr-2"></div><span>Oral</span></div>
@@ -196,27 +201,137 @@
                         "collagen-pm": { key: "collagen", name: "Collagen", dose: "15g", time: "PM", freq: "daily" }, 
                         "vit-c": { key: "vit-c", name: "Vit C", dose: "1g", time: "AM Meal", freq: "daily" }, 
                         "vit-c-pm": { key: "vit-c", name: "Vit C", dose: "1g", time: "PM Meal", freq: "daily" }, 
-                        "vit-d": { key: "vit-d", name: "Vit D3", dose: "5,000 IU", time: "With Meal", freq: "daily" }, 
+                        "vit-d": { key: "vit-d", name: "Vit D", dose: "5,000 IU", time: "With Meal", freq: "daily" }, 
                         "ha-oral": { key: "ha", name: "Hyaluronic Acid", dose: "200mg", time: "Any", freq: "daily" }, 
-                        "ghk-cu": { key: "ghk-cu", name: "GHK-Cu (Injectable)", dose: "1mg", inj: "4 IU", time: "PM", freq: "daily" }, 
+                        "ghk-cu": { key: "ghk-cu", name: "GHK-Cu", dose: "1mg", inj: "4 IU", time: "PM", freq: "daily" }, 
                         "hgh": { key: "hgh", name: "HGH", dose: "1.5 IU", inj: "11 IU", time: "AM", freq: "daily" }, 
                         "hgh-pm": { key: "hgh", name: "HGH", dose: "1.5 IU", inj: "11 IU", time: "PM", freq: "daily" }, 
-                        "rlt": { key: "rlt", name: "Red Light Therapy", dose: "10-15 min", time: "Any", freq: "eod" }, 
+                        "rlt": { key: "rlt", name: "Red Light", dose: "10-15 min", time: "Any", freq: "eod" }, 
                         "retatrutide-p3": { key: "retatrutide", name: "Retatrutide", dose: "4mg", inj: "120 IU (split)", time: "Any", freq: "weekly" } 
                     } 
                 },
                 protocol: { 
-                    "bpc-157": { name: "BPC-157", category: "Peptide", status: "research", info: { summary: 'A synthetic peptide derived from a protein in gastric juice, known for its potent, localized tissue-regenerative properties.', mechanism: 'Primarily works by promoting angiogenesis (new blood vessel formation), which enhances delivery of oxygen and nutrients to the wound. It also stimulates the migration and proliferation of fibroblasts, the cells responsible for producing collagen.', notes: 'Subcutaneous injection near (but not in) incisions is the most effective method for localized skin healing. Its expression of growth hormone receptors may amplify the effects of HGH.' }, risk: { status: "Unapproved drug; not for human use.", primary: "Lack of long-term human safety data; significant sourcing risks (purity, contaminants). Reported side effects are generally mild: nausea, fatigue, dizziness.", monitoring: "Unknown long-term effects." } }, 
-                    "tb-500": { name: "TB-500", category: "Peptide", status: "research", info: { summary: 'The synthetic form of Thymosin Beta-4 (Tβ4), a naturally occurring peptide that promotes systemic (whole-body) repair.', mechanism: 'Upregulates a cellular building block called actin, which is fundamental to cell migration, differentiation, and proliferation. It acts as a system-wide signal to attract repair cells to injury sites. Also promotes angiogenesis and has anti-inflammatory properties.', notes: 'Administered subcutaneously. A consistent daily dose provides steady systemic levels for ongoing support.' }, risk: { status: "Unapproved drug; not for human use.", primary: "Lack of long-term human safety data. Its potent angiogenic properties mean it could theoretically promote tumor growth.", monitoring: "Contraindicated in individuals with a history of or active cancer." } }, 
-                    "ghk-cu": { name: "GHK-Cu (Injectable)", category: "Peptide", status: "research", info: { summary: 'A naturally occurring copper peptide complex that plays a key role in dermal remodeling. Injectable form provides systemic support for tissue regeneration.', mechanism: 'Regulates the synthesis and breakdown of extracellular matrix (ECM) components. It stimulates production of healthy collagen and elastin while also helping to remove damaged proteins and disorganized scar tissue. It can also modulate gene expression, shifting cells towards a more regenerative state.', notes: 'Systemic administration supports widespread tissue health.' }, risk: { status: "Unapproved drug; not for human use.", primary: "Lack of human safety data. Potential for injection site reactions, flushing, or nausea. Systemic copper administration carries risks.", monitoring: "Contraindicated in individuals with copper metabolism disorders (e.g., Wilson's disease)." } }, 
-                    "kpv": { name: "KPV", category: "Peptide", status: "research", info: { summary: 'A tripeptide fragment of α-MSH, it is one of the most potent anti-inflammatory peptides known, used here to control post-surgical inflammation.', mechanism: 'Acts intracellularly to inhibit key inflammatory signaling pathways (like NF-κB). This prevents the over-production of pro-inflammatory cytokines, allowing for necessary inflammation without causing excessive pain, swelling, or collateral tissue damage. It also has antimicrobial properties.', notes: 'Administered via subcutaneous injection for systemic anti-inflammatory benefits.' }, risk: { status: "Unapproved peptide; not for human use.", primary: "Lack of human safety data. Reported side effects are typically mild, such as minor GI or skin reactions.", monitoring: "Unknown long-term effects." } }, 
-                    "hgh": { name: "HGH", category: "Hormone", status: "prescription", info: { summary: 'Human Growth Hormone (somatropin) is a master regenerative hormone that creates a powerful systemic drive towards healing.', mechanism: 'Stimulates production of IGF-1, which in turn drives cell growth, repair, and proliferation throughout the body. It is a potent stimulator of collagen synthesis, providing the raw material for strong new tissue.', notes: 'Splitting the dose into AM/PM injections can help maintain more stable levels and may reduce side effects.' }, risk: { status: "Prescription drug. Off-label distribution is illegal.", primary: "Edema (fluid retention), arthralgia (joint pain), carpal tunnel syndrome, impaired glucose tolerance.", monitoring: "Contraindicated in acute critical illness post-surgery and in active cancer. Must be prescribed and monitored by a physician." } }, 
-                    "retatrutide": { name: "Retatrutide", category: "Peptide", status: "experimental", info: { summary: 'A novel, experimental triple-receptor agonist peptide (GLP-1, GIP, glucagon) for profound metabolic optimization and inflammation control.', mechanism: 'By improving insulin sensitivity, lipid profiles, and blood pressure, it ensures energy is partitioned effectively towards tissue repair. It also lowers systemic inflammation, creating an ideal internal environment for healing.', notes: 'Highly experimental. The 4mg dose exceeds a single 1mL syringe capacity and must be split into two separate injections.' }, risk: { status: "Investigational new drug (in clinical trials).", primary: "Common side effects in trials include nausea and other GI issues. Long-term safety is unknown.", monitoring: "Not legally available for use outside of sanctioned clinical trials." } }, 
-                    "collagen": { name: "Multi-Collagen Powder", category: "Supplement", status: "supplement", info: { summary: 'Provides the direct raw materials (amino acids like glycine, proline) needed for the body to construct its own new collagen.', mechanism: 'Supplies the specific building blocks for Type I and Type III collagen, the predominant types in the skin, supporting the formation of a strong, healthy dermal matrix.', notes: 'Use a hydrolyzed powder for best absorption. The 30g daily dose is split to improve absorption and provide a steady supply of amino acids.' }, risk: { status: "Supplement (GRAS)", primary: "Generally very low risk.", monitoring: "Follow recommended dosage." } }, 
-                    "vit-c": { name: "Vitamin C", category: "Supplement", status: "supplement", info: { summary: 'An essential cofactor for the enzymes that create stable, strong collagen. It is also a potent antioxidant.', mechanism: 'Without adequate Vitamin C, the body cannot form functional collagen, leading to impaired wound healing. It is a non-negotiable component of tissue repair.', notes: 'A high therapeutic dose is warranted post-surgery due to the high demand for collagen synthesis. Take in divided doses.' }, risk: { status: "Supplement (GRAS)", primary: "Generally low risk; very high doses can cause GI upset.", monitoring: "Follow recommended dosage." } }, 
-                    "vit-d": { name: "Vitamin D3", category: "Supplement", status: "supplement", info: { summary: 'A critical modulator of the immune system and cellular function, essential for healthy healing.', mechanism: 'Helps regulate the proliferation and differentiation of cells in all phases of healing. Deficiency is linked to poorer surgical outcomes.', notes: 'The ideal dosage should be guided by pre-operative blood testing to correct any existing deficiency.' }, risk: { status: "Supplement (GRAS)", primary: "Low risk at this dose; toxicity is possible at extremely high, prolonged doses.", monitoring: "Follow recommended dosage." } }, 
-                    "ha": { name: "Hyaluronic Acid", category: "Supplement", status: "supplement", info: { summary: 'A major component of the skin\'s extracellular matrix, responsible for hydration, lubrication, and volume.', mechanism: 'Plays an active role in all phases of healing by providing structural support and facilitating cell migration. Oral supplementation supports systemic hydration and tissue quality from within.', notes: 'Can also be applied topically in a serum for additional benefit.' }, risk: { status: "Supplement (GRAS)", primary: "Generally very low risk.", monitoring: "Follow recommended dosage." } }, 
-                    "rlt": { name: "Red Light Therapy", category: "Therapy", status: "device", info: { summary: 'A biophysical therapy that uses specific wavelengths of light to stimulate cellular processes non-invasively, acting as a powerful catalyst for healing.', mechanism: 'Light photons are absorbed by mitochondria, which boosts the production of ATP (cellular energy). This extra energy powers all healing processes, including cell proliferation, collagen synthesis, and angiogenesis, while also reducing inflammation.', notes: 'Use a device that provides both red (630-660nm) and near-infrared (810-850nm) wavelengths.' }, risk: { status: "FDA-cleared devices exist", primary: "Low risk; potential for skin irritation or eye damage without protection.", monitoring: "Use appropriate eye protection." } } 
+                    "bpc-157": { 
+                        name: "BPC-157", 
+                        category: "Peptide", 
+                        status: "research", 
+                        info: { 
+                            summary: "BPC-157, or Body Protection Compound-157, is a synthetic peptide consisting of 15 amino acids, derived from a protein found in human gastric juice known as Body Protection Compound (BPC). Discovered in the 1990s during research into gastric proteins, it was initially explored for its potential to treat ulcers and gastrointestinal disorders. However, its remarkable regenerative properties soon became evident, leading to extensive studies on its ability to accelerate healing across various tissues, including skin, muscle, tendons, ligaments, and the gut. BPC-157 promotes the formation of new blood vessels (angiogenesis), enhances collagen production, and exhibits potent anti-inflammatory effects, making it a promising tool for post-surgical recovery. Its localized action allows it to target specific injury sites effectively, while its systemic benefits support overall tissue health. Although not yet approved by the FDA, its safety profile in animal studies is encouraging, with ongoing research aimed at unlocking its full therapeutic potential.", 
+                            mechanism: "BPC-157 primarily works by promoting angiogenesis, the process of forming new blood vessels, which enhances the delivery of oxygen and nutrients to damaged tissues. It stimulates the migration and proliferation of fibroblasts, the cells responsible for synthesizing collagen, a critical component of tissue repair. Additionally, it upregulates growth hormone receptors, potentially amplifying the effects of human growth hormone (HGH) when used concurrently. BPC-157 modulates inflammatory pathways by reducing pro-inflammatory cytokines and increasing anti-inflammatory mediators, creating an optimal healing environment. It also activates the FAK-paxillin signaling pathway, essential for cell migration and adhesion, and influences the expression of vascular endothelial growth factor (VEGF) to further support angiogenesis. Emerging research suggests neuroprotective effects, indicating potential benefits for nerve repair post-surgery.", 
+                            notes: "Subcutaneous injection near (but not into) surgical incisions is the most effective method for localized tissue healing, delivering BPC-157 directly to the site of injury. Its synergy with HGH may enhance overall regenerative outcomes. Sourcing from reputable suppliers is critical due to its unregulated status, ensuring purity and minimizing contamination risks. While animal studies report no significant toxicity, its long-term effects in humans remain unknown, necessitating caution and professional oversight. BPC-157 may also support gastrointestinal health and reduce scar formation, making it a versatile component of recovery protocols." 
+                        }, 
+                        risk: { status: "Unapproved drug; not for human use.", primary: "Lack of long-term human safety data; significant sourcing risks (purity, contaminants). Reported side effects are generally mild: nausea, fatigue, dizziness.", monitoring: "Unknown long-term effects." } 
+                    }, 
+                    "tb-500": { 
+                        name: "TB-500", 
+                        category: "Peptide", 
+                        status: "research", 
+                        info: { 
+                            summary: "TB-500 is a synthetic version of Thymosin Beta-4 (Tβ4), a 43-amino-acid peptide naturally present in high concentrations in blood platelets, wound fluid, and various tissues. It plays a pivotal role in systemic healing by regulating actin, a fundamental protein in cell structure and movement. Extensively studied in animal models, TB-500 accelerates recovery from injuries to skin, muscle, tendons, and ligaments by promoting angiogenesis, reducing inflammation, and enhancing stem cell migration. Its systemic effects make it ideal for whole-body repair, particularly in post-surgical contexts where widespread tissue damage occurs. While not FDA-approved, its use in athletic and regenerative communities highlights its potential, though human clinical data remains limited.", 
+                            mechanism: "TB-500 upregulates actin, facilitating cell migration, differentiation, and proliferation across the body. It acts as a systemic signal, attracting repair cells to injury sites and promoting angiogenesis to improve blood flow. Its anti-inflammatory properties reduce swelling and pain, while its ability to enhance stem cell activity accelerates tissue regeneration. TB-500 also boosts mitochondrial function, increasing cellular energy for healing processes.", 
+                            notes: "Administered subcutaneously, a daily dose ensures steady systemic support. Often paired with BPC-157 for synergistic effects, TB-500’s broad action complements localized therapies. Its experimental nature requires careful sourcing and monitoring." 
+                        }, 
+                        risk: { status: "Unapproved drug; not for human use.", primary: "Lack of long-term human safety data. Its potent angiogenic properties mean it could theoretically promote tumor growth.", monitoring: "Contraindicated in individuals with a history of or active cancer." } 
+                    }, 
+                    "ghk-cu": { 
+                        name: "GHK-Cu", 
+                        category: "Peptide", 
+                        status: "research", 
+                        info: { 
+                            summary: "GHK-Cu is a copper-binding tripeptide naturally occurring in human plasma, known for its role in dermal remodeling and tissue regeneration. First identified in the 1970s, it declines with age, correlating with reduced healing capacity. The injectable form delivers systemic benefits, supporting skin health, wound healing, and anti-aging by stimulating collagen and elastin production while clearing damaged proteins. Research also explores its potential in hair growth and neuroprotection, making it a multifaceted recovery tool.", 
+                            mechanism: "GHK-Cu regulates extracellular matrix (ECM) turnover, promoting healthy collagen and elastin synthesis while removing disorganized scar tissue. It modulates gene expression to favor regeneration, enhances antioxidant defenses, and supports angiogenesis, improving tissue oxygenation.", 
+                            notes: "Systemic administration via injection maximizes its widespread effects. Its copper content requires monitoring to avoid excess, particularly in those with copper metabolism issues." 
+                        }, 
+                        risk: { status: "Unapproved drug; not for human use.", primary: "Lack of human safety data. Potential for injection site reactions, flushing, or nausea. Systemic copper administration carries risks.", monitoring: "Contraindicated in individuals with copper metabolism disorders (e.g., Wilson's disease)." } 
+                    }, 
+                    "kpv": { 
+                        name: "KPV", 
+                        category: "Peptide", 
+                        status: "research", 
+                        info: { 
+                            summary: "KPV, a tripeptide derived from alpha-melanocyte-stimulating hormone (α-MSH), is renowned for its potent anti-inflammatory properties. It excels at controlling post-surgical inflammation, reducing pain and swelling without suppressing the necessary immune response. Its antimicrobial effects further protect healing tissues, making it a key player in early recovery phases.", 
+                            mechanism: "KPV inhibits inflammatory pathways like NF-κB, reducing pro-inflammatory cytokine production while promoting resolution. It also disrupts microbial growth, enhancing tissue safety.", 
+                            notes: "Subcutaneous injections provide systemic anti-inflammatory benefits. Ideal for acute inflammation management, KPV’s mild side effect profile supports its experimental use." 
+                        }, 
+                        risk: { status: "Unapproved peptide; not for human use.", primary: "Lack of human safety data. Reported side effects are typically mild, such as minor GI or skin reactions.", monitoring: "Unknown long-term effects." } 
+                    }, 
+                    "hgh": { 
+                        name: "HGH", 
+                        category: "Hormone", 
+                        status: "prescription", 
+                        info: { 
+                            summary: "Human Growth Hormone (HGH), or somatropin, is a pituitary-derived hormone driving regeneration, growth, and metabolism. Its synthetic form enhances post-surgical healing by boosting collagen synthesis and cell repair across the body. Widely used in regenerative medicine, HGH requires careful dosing due to its potency.", 
+                            mechanism: "HGH stimulates IGF-1 production, promoting cell proliferation and collagen formation. It enhances protein synthesis and fat metabolism, fueling tissue repair.", 
+                            notes: "AM/PM split dosing stabilizes levels and minimizes side effects. Prescription-only status mandates medical supervision." 
+                        }, 
+                        risk: { status: "Prescription drug. Off-label distribution is illegal.", primary: "Edema, arthralgia, carpal tunnel syndrome, impaired glucose tolerance.", monitoring: "Contraindicated in acute critical illness post-surgery and in active cancer." } 
+                    }, 
+                    "retatrutide": { 
+                        name: "Retatrutide", 
+                        category: "Peptide", 
+                        status: "experimental", 
+                        info: { 
+                            summary: "Retatrutide is an experimental triple-receptor agonist (GLP-1, GIP, glucagon) designed for metabolic optimization and inflammation control. Under investigation for obesity and metabolic disorders, it supports healing by improving energy allocation and reducing systemic inflammation.", 
+                            mechanism: "It enhances insulin sensitivity, lipid profiles, and blood pressure, directing energy to repair while lowering inflammation via multi-receptor action.", 
+                            notes: "Highly experimental; its 4mg dose requires split injections. Use is speculative, based on emerging research." 
+                        }, 
+                        risk: { status: "Investigational new drug (in clinical trials).", primary: "Nausea, GI issues; long-term safety unknown.", monitoring: "Not legally available outside clinical trials." } 
+                    }, 
+                    "collagen": { 
+                        name: "Collagen", 
+                        category: "Supplement", 
+                        status: "supplement", 
+                        info: { 
+                            summary: "Collagen, the body’s most abundant protein, provides essential amino acids (glycine, proline) for skin, joint, and bone repair. Hydrolyzed collagen supplements enhance wound healing, elasticity, and hydration, supporting post-surgical recovery.", 
+                            mechanism: "Supplies building blocks for Type I and III collagen, stimulating endogenous production and strengthening the dermal matrix.", 
+                            notes: "Split 30g daily dose improves absorption. Hydrolyzed form ensures bioavailability." 
+                        }, 
+                        risk: { status: "Supplement (GRAS)", primary: "Generally very low risk.", monitoring: "Follow recommended dosage." } 
+                    }, 
+                    "vit-c": { 
+                        name: "Vit C", 
+                        category: "Supplement", 
+                        status: "supplement", 
+                        info: { 
+                            summary: "Vitamin C is an essential cofactor for collagen synthesis and a powerful antioxidant, critical for tissue repair and immune support post-surgery.", 
+                            mechanism: "Facilitates collagen cross-linking by enzymes and neutralizes oxidative stress, protecting healing tissues.", 
+                            notes: "High doses in divided increments maintain levels during recovery." 
+                        }, 
+                        risk: { status: "Supplement (GRAS)", primary: "Low risk; high doses may cause GI upset.", monitoring: "Follow recommended dosage." } 
+                    }, 
+                    "vit-d": { 
+                        name: "Vit D", 
+                        category: "Supplement", 
+                        status: "supplement", 
+                        info: { 
+                            summary: "Vitamin D modulates immune function and cellular differentiation, vital for healing and infection prevention. Synthesized via sunlight or supplemented, it supports bone and tissue health.", 
+                            mechanism: "Regulates cell proliferation and enhances calcium absorption, reducing recovery complications.", 
+                            notes: "Dosage should correct pre-existing deficiencies, guided by blood tests." 
+                        }, 
+                        risk: { status: "Supplement (GRAS)", primary: "Low risk at recommended doses; toxicity rare.", monitoring: "Follow recommended dosage." } 
+                    }, 
+                    "ha": { 
+                        name: "Hyaluronic Acid", 
+                        category: "Supplement", 
+                        status: "supplement", 
+                        info: { 
+                            summary: "Hyaluronic Acid, a key skin matrix component, hydrates and supports tissue repair across all healing phases.", 
+                            mechanism: "Facilitates cell migration and reduces inflammation, enhancing structural integrity.", 
+                            notes: "Oral and topical use improves hydration and elasticity." 
+                        }, 
+                        risk: { status: "Supplement (GRAS)", primary: "Generally very low risk.", monitoring: "Follow recommended dosage." } 
+                    }, 
+                    "rlt": { 
+                        name: "Red Light", 
+                        category: "Therapy", 
+                        status: "device", 
+                        info: { 
+                            summary: "Red Light Therapy uses specific light wavelengths (630-850nm) to boost cellular energy and healing non-invasively, aiding skin repair and inflammation reduction.", 
+                            mechanism: "Photons enhance mitochondrial ATP production, accelerating collagen synthesis, angiogenesis, and blood flow.", 
+                            notes: "Requires red and near-infrared devices; safe and effective as an adjunct therapy." 
+                        }, 
+                        risk: { status: "FDA-cleared devices exist", primary: "Low risk; potential skin/eye irritation.", monitoring: "Use eye protection." } 
+                    } 
                 }
             };
 
