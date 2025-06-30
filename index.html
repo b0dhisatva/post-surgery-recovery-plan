@@ -26,13 +26,12 @@
         body { font-family: 'Inter', sans-serif; background-color: #111827; color: #D1D5DB; }
         .main-tab.active, .main-tab:hover { color: #60A5FA; border-bottom-color: #60A5FA; }
         .main-tab { transition: color 0.2s, border-bottom-color 0.2s; border-bottom: 2px solid transparent; }
-        .day-card { border-left: 4px solid #3B82F6; } .day-card.phase-2 { border-left-color: #10b981; } .day-card.phase-3 { border-left-color: #8b5cf6; }
+        .day-card { border-left: 4px solid #3B82F6; }
         .checkbox-custom { appearance: none; -webkit-appearance: none; height: 1.25rem; width: 1.25rem; border-radius: 0.25rem; border: 2px solid #4B5563; background-color: #374151; cursor: pointer; position: relative; transition: background-color 0.2s, border-color 0.2s; }
         .checkbox-custom:checked { background-color: #3B82F6; border-color: #60A5FA; }
         .checkbox-custom:checked::after { content: '✓'; position: absolute; color: white; top: 50%; left: 50%; transform: translate(-50%, -50%); font-size: 1rem; font-weight: bold; }
         .progress-bar-bg { background-color: #374151; }
         .progress-bar-fg { background-color: #3B82F6; transition: width 0.3s ease-in-out; }
-        .phase-tab.active { background-color: #3B82F6; color: white; }
         .modal { transition: opacity 0.25s ease, visibility 0.25s ease; }
         .modal-content { transition: transform 0.25s ease; }
         #app-loader { transition: opacity 0.3s ease-in-out; }
@@ -79,10 +78,6 @@
             <div id="checklist-view" class="tab-content">
                 <div class="px-4 sm:px-6 lg:px-8 pt-6">
                     <div class="flex items-center space-x-4 text-sm text-gray-400">
-                        <div class="flex items-center"><div class="w-4 h-4 rounded-full bg-blue-500 mr-2"></div><span>Phase I</span></div>
-                        <div class="flex items-center"><div class="w-4 h-4 rounded-full bg-emerald-500 mr-2"></div><span>Phase II</span></div>
-                        <div class="flex items-center"><div class="w-4 h-4 rounded-full bg-violet-500 mr-2"></div><span>Phase III</span></div>
-                    </div>
                 </div>
                 <div id="checklist-container" class="p-4 sm:p-6 lg:p-8 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6"></div>
             </div>
@@ -95,44 +90,16 @@
                 <section id="protocol" class="mb-16 scroll-mt-20">
                     <h2 class="text-3xl font-bold mb-2 text-white">Integrated Protocol Timeline</h2>
                     <p class="mb-6 text-gray-400 max-w-3xl">This section presents the core of your recovery plan...</p>
-                    <div class="mb-6"><div class="flex flex-wrap border-b border-gray-700">
-                            <button data-phase="phase1" class="phase-tab px-4 py-2 font-medium text-gray-300 hover:bg-gray-700 active">Phase I</button>
-                            <button data-phase="phase2" class="phase-tab px-4 py-2 font-medium text-gray-300 hover:bg-gray-700">Phase II</button>
-                            <button data-phase="phase3" class="phase-tab px-4 py-2 font-medium text-gray-300 hover:bg-gray-700">Phase III</button>
-                    </div></div>
                     <div class="flex items-center space-x-4 text-sm text-gray-400 mb-4">
                         <div class="flex items-center"><div class="w-1 h-4 bg-emerald-500 mr-2"></div><span>Injectable</span></div>
                         <div class="flex items-center"><div class="w-1 h-4 bg-blue-500 mr-2"></div><span>Oral</span></div>
                     </div>
-                    <div id="protocol-phase1" class="protocol-phase-content"></div>
-                    <div id="protocol-phase2" class="protocol-phase-content hidden"></div>
                     <div id="protocol-phase3" class="protocol-phase-content hidden"></div>
                 </section>
                 <section id="library" class="mb-16 scroll-mt-20">
                     <h2 class="text-3xl font-bold mb-2 text-white">Compound Library</h2>
                     <p class="mb-6 text-gray-400 max-w-3xl">Explore the science behind your recovery protocol...</p>
                     <div id="library-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4"></div>
-                </section>
-                <section id="phases" class="mb-16 scroll-mt-20">
-                    <h2 class="text-3xl font-bold mb-2 text-white">Healing Phases</h2>
-                    <p class="mb-8 text-gray-400 max-w-3xl">Each stage of recovery has unique goals. Understanding them keeps expectations realistic and guides your daily focus.</p>
-                    <div id="phases-grid" class="grid grid-cols-1 md:grid-cols-3 gap-6">
-                        <button class="phase-card bg-gray-800 p-6 rounded-lg shadow-lg border border-gray-700 text-left hover:bg-gray-700/50 transition" data-phase="inflammation">
-                            <h3 class="font-bold text-blue-400 text-xl mb-2">1. Inflammation</h3>
-                            <p class="text-xs text-gray-500 mb-4">Day 1 - 7</p>
-                            <p class="text-gray-400 text-sm">Swelling and discomfort are highest. Protect the surgical site and start gentle mobility.</p>
-                        </button>
-                        <button class="phase-card bg-gray-800 p-6 rounded-lg shadow-lg border border-gray-700 text-left hover:bg-gray-700/50 transition" data-phase="proliferation">
-                            <h3 class="font-bold text-emerald-400 text-xl mb-2">2. Proliferation</h3>
-                            <p class="text-xs text-gray-500 mb-4">Day 4 - Week 6</p>
-                            <p class="text-gray-400 text-sm">Your body begins rebuilding tissue. Activity levels increase with focus on nutrition.</p>
-                        </button>
-                        <button class="phase-card bg-gray-800 p-6 rounded-lg shadow-lg border border-gray-700 text-left hover:bg-gray-700/50 transition" data-phase="remodeling">
-                            <h3 class="font-bold text-violet-400 text-xl mb-2">3. Remodeling</h3>
-                            <p class="text-xs text-gray-500 mb-4">Week 4+</p>
-                            <p class="text-gray-400 text-sm">Tissue strength improves as mobility returns. Gradually transition back to normal routines.</p>
-                        </button>
-                    </div>
                 </section>
                 <section id="risks" class="scroll-mt-20">
                     <h2 class="text-3xl font-bold mb-2 text-white">Risk & Safety Center</h2>
@@ -193,26 +160,6 @@
             // color in the protocol tables and legend.
             const injectableKeys = new Set(['bpc-157','tb-500','kpv','ghk-cu','hgh']);
 
-            const phaseDetails = {
-                inflammation: {
-                    title: 'Phase I: Inflammation',
-                    body: `<p class="mb-4">Immediately after surgery your body enters a protective inflammatory response. Swelling, warmth and soreness are signs that immune cells are rushing in to defend the area and begin repairing damaged tissue. Rest, ice and elevation are key during this time to keep discomfort manageable while still allowing blood flow.</p>
-                           <p class="mb-4">Short bouts of gentle movement help circulate lymph and prevent stiffness, but you should avoid pushing into pain. Supportive garments or wraps can reduce excessive fluid build-up around the incision. Maintain any medication schedule prescribed by your doctor and pay attention to early warning signs of infection such as fever or unusual redness.</p>
-                           <p class="mb-4">Good sleep and adequate hydration give your body the building blocks it needs to start knitting tissue back together. Most people will notice swelling peak around day three and then slowly begin to subside. Patience is essential—trying to speed this stage often leads to setbacks.</p>`
-                },
-                proliferation: {
-                    title: 'Phase II: Proliferation',
-                    body: `<p class="mb-4">Within a week new cells and collagen fibers actively rebuild the surgical site. Light activity like short walks or stretching increases nutrient delivery and encourages proper alignment of the developing tissue. Pain typically decreases, though fatigue may linger as your body uses a great deal of energy to regenerate.</p>
-                           <p class="mb-4">A nutrient-dense diet becomes especially important. Lean proteins, colorful vegetables and adequate water support the creation of fresh connective tissue. Your care team may introduce targeted physical therapy or massage to minimize scar tissue and encourage a healthy range of motion.</p>
-                           <p class="mb-4">Listen closely to your body and scale activities accordingly. While many people feel better during this stage, overexertion can easily inflame healing tissues. Consistency and moderate effort provide far better results than sporadic bursts of high intensity.</p>`
-                },
-                remodeling: {
-                    title: 'Phase III: Remodeling',
-                    body: `<p class="mb-4">Several weeks in, the focus shifts from creating new tissue to strengthening it. Collagen fibers reorganize along lines of tension, gradually improving durability. You can begin reintroducing more demanding movements, but continue to respect any lingering soreness or tightness.</p>
-                           <p class="mb-4">Functional exercises and daily activities help your body adapt to the stresses of normal life. Keep monitoring the incision for signs of irritation and consider gentle scar massage or silicone treatments if recommended by your provider.</p>
-                           <p class="mb-4">Long-term recovery hinges on maintaining good habits established earlier: quality sleep, balanced nutrition and progressive movement. Even when you feel nearly back to normal, underlying tissues continue maturing for months. Staying consistent during this phase sets the stage for a full and lasting return to your usual routine.</p>`
-                }
-            };
             let db;
             let checklistDocRef;
             let logsDocRef;
@@ -357,8 +304,8 @@
 
                 while (currentDate <= endDate) {
                     const dayIndex = dayCounter;
-                    const currentPhaseInfo = phases.find(p => dayIndex >= p.start && dayIndex <= p.end);
-                    const currentPhaseNumber = phases.indexOf(currentPhaseInfo) + 1;
+                    const currentPhaseInfo = phases[0];
+                    const currentPhaseNumber = 3;
                     const dayCard = document.createElement('div');
                     dayCard.className = `day-card ${currentPhaseInfo.class} bg-gray-800 rounded-lg shadow-lg p-4 flex flex-col`;
                     dayCard.id = `day-${dayIndex}`;
@@ -404,7 +351,6 @@
 
                     dayCard.innerHTML = `<div class="flex justify-between items-center mb-2">
                             <h3 class="font-bold text-lg text-white">${dateString}</h3>
-                            <span class="text-xs font-semibold px-2 py-1 rounded-full ${currentPhaseInfo.class === 'day-card' ? 'bg-blue-500/20 text-blue-300' : currentPhaseInfo.class === 'phase-2' ? 'bg-emerald-500/20 text-emerald-300' : 'bg-violet-500/20 text-violet-300'}">${currentPhaseInfo.name}</span>
                         </div><div class="flex-grow">${checklistHTML || '<p class="text-gray-500 text-sm py-2">Rest day from scheduled therapies.</p>'}</div>
                         <div class="mt-4"><div class="progress-bar-bg w-full h-2 rounded-full overflow-hidden"><div class="progress-bar-fg h-full" style="width: 0%;"></div></div></div>`;
                     checklistContainer.appendChild(dayCard);
@@ -424,29 +370,18 @@
             }
             function populateProtocolTables() {
                 const { protocol } = appData;
-                const phaseContainers = {
-                    phase1: document.getElementById('protocol-phase1'),
-                    phase2: document.getElementById('protocol-phase2'),
-                    phase3: document.getElementById('protocol-phase3'),
-                };
-                const phaseWeeks = {
-                    phase1: 'Weeks 1-2',
-                    phase2: 'Weeks 3-6',
-                    phase3: 'Weeks 7-11',
-                };
-                for (const phase in phaseContainers) {
-                    let tableRowsHTML = '';
-                    for (const key in protocol) {
-                        const compound = protocol[key];
-                        if (compound.phases[phase]) {
-                            const pData = compound.phases[phase];
-                            const injectable = injectableKeys.has(key);
-                            const lineClass = injectable ? 'bg-emerald-500' : 'bg-blue-500';
-                            tableRowsHTML += `<tr class="hover:bg-gray-700/50"><td class="p-3 font-medium"><span class="inline-block w-1 h-4 ${lineClass} mr-2"></span><button data-key="${key}" class="compound-link text-blue-400 hover:text-blue-300 hover:underline">${compound.name}</button></td><td class="p-3 text-gray-300">${pData.dosage}</td><td class="p-3 text-gray-300">${pData.freq}</td><td class="p-3 text-gray-300">${pData.time}</td><td class="p-3 text-gray-300 font-mono">${pData.injectionAmount || '—'}</td></tr>`;
-                        }
+                const phaseContainer = document.getElementById("protocol-phase3");
+                let tableRowsHTML = "";
+                for (const key in protocol) {
+                    const compound = protocol[key];
+                    if (compound.phases.phase3) {
+                        const pData = compound.phases.phase3;
+                        const injectable = injectableKeys.has(key);
+                        const lineClass = injectable ? "bg-emerald-500" : "bg-blue-500";
+                        tableRowsHTML += `<tr class="hover:bg-gray-700/50"><td class="p-3 font-medium"><span class="inline-block w-1 h-4 ${lineClass} mr-2"></span><button data-key="${key}" class="compound-link text-blue-400 hover:text-blue-300 hover:underline">${compound.name}</button></td><td class="p-3 text-gray-300">${pData.dosage}</td><td class="p-3 text-gray-300">${pData.freq}</td><td class="p-3 text-gray-300">${pData.time}</td><td class="p-3 text-gray-300 font-mono">${pData.injectionAmount || "—"}
                     }
-                    phaseContainers[phase].innerHTML = `<p class="text-gray-400 text-sm mb-2">${phaseWeeks[phase]}</p><div class="bg-gray-800 p-4 sm:p-6 rounded-lg shadow-lg"><div class="overflow-x-auto"><table class="w-full table-auto text-left text-sm"><thead class="bg-gray-700/50 text-gray-300"><tr><th class="p-3 font-semibold">Compound</th><th class="p-3 font-semibold">Dosage</th><th class="p-3 font-semibold">Frequency</th><th class="p-3 font-semibold">Time of Day</th><th class="p-3 font-semibold">Inj. Amount (units)</th></tr></thead><tbody class="divide-y divide-gray-700">${tableRowsHTML}</tbody></table></div></div>`;
                 }
+                phaseContainer.innerHTML = `<div class="bg-gray-800 p-4 sm:p-6 rounded-lg shadow-lg"><div class="overflow-x-auto"><table class="w-full table-auto text-left text-sm"><thead class="bg-gray-700/50 text-gray-300"><tr><th class="p-3 font-semibold">Compound</th><th class="p-3 font-semibold">Dosage</th><th class="p-3 font-semibold">Frequency</th><th class="p-3 font-semibold">Time of Day</th><th class="p-3 font-semibold">Inj. Amount (units)</th></tr></thead><tbody class="divide-y divide-gray-700">${tableRowsHTML}</tbody></table></div></div>`;
             }
             function populateLibrary() {
                 const libraryGrid = document.getElementById('library-grid'); libraryGrid.innerHTML = '';
@@ -462,104 +397,19 @@
                 const compound = appData.protocol[key]; modalTitle.textContent = compound.name; let notesHtml = compound.info.notes ? `<div class="mt-4 p-3 bg-blue-500/10 border border-blue-500/30 rounded-md"><h5 class="font-semibold text-blue-300">Key Notes</h5><p class="text-sm text-blue-300/80">${compound.info.notes}</p></div>` : '';
                 modalBody.innerHTML = `<p class="text-gray-300 mb-4">${compound.info.summary}</p><h4 class="font-bold text-lg text-white mb-2">Mechanism of Action</h4><p class="text-gray-300">${compound.info.mechanism}</p>${notesHtml}`; modal.classList.remove('invisible', 'opacity-0'); modalContent.classList.remove('scale-95');
             }
-            function openPhaseModal(key) {
-                const phase = phaseDetails[key];
-                modalTitle.textContent = phase.title;
-                modalBody.innerHTML = phase.body;
-                modal.classList.remove('invisible', 'opacity-0');
-                modalContent.classList.remove('scale-95');
-            }
             function closeModal() { modal.classList.add('invisible', 'opacity-0'); modalContent.classList.add('scale-95'); }
             function setupProtocolEventListeners() {
-                const phaseTabs = document.querySelectorAll('.phase-tab'); const phaseContents = document.querySelectorAll('.protocol-phase-content');
-                phaseTabs.forEach(tab => { tab.addEventListener('click', () => { phaseTabs.forEach(t => t.classList.remove('active')); tab.classList.add('active'); phaseContents.forEach(content => content.classList.add('hidden')); document.getElementById(`protocol-${tab.dataset.phase}`).classList.remove('hidden'); }); });
-                document.querySelectorAll('#protocol-view .compound-link').forEach(link => { link.addEventListener('click', (e) => { e.preventDefault(); openModal(link.dataset.key); }); });
-                document.querySelectorAll('.phase-card').forEach(card => {
-                    card.addEventListener('click', () => openPhaseModal(card.dataset.phase));
-                });
-            }
-            function handleTabSwitching() {
-                document.querySelectorAll('.main-tab').forEach(tab => { tab.addEventListener('click', () => { document.querySelectorAll('.main-tab').forEach(t => t.classList.remove('active')); tab.classList.add('active'); document.querySelectorAll('.tab-content').forEach(content => content.classList.add('hidden')); document.getElementById(`${tab.dataset.tab}-view`).classList.remove('hidden'); }); });
-            }
-            
-            function initializeLogView() {
-                const logContainer = document.getElementById('log-container');
-                logContainer.innerHTML = '';
-                const { startDate: start, endDate: end } = appData.checklist;
-                const startDate = new Date(start + 'T00:00:00');
-                const endDate = new Date(end + 'T00:00:00');
-                let currentDate = new Date(startDate);
-                let dayCounter = 0;
-
-                while(currentDate <= endDate) {
-                    const dayIndex = `day-${dayCounter}`;
-                    const dateString = currentDate.toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric' });
-                    
-                    const logCard = document.createElement('div');
-                    logCard.className = 'bg-gray-800 rounded-lg shadow-lg p-4 flex flex-col space-y-4';
-                    logCard.id = `log-${dayIndex}`;
-                    logCard.innerHTML = `
-                        <div>
-                            <h3 class="font-bold text-lg text-white">${dateString}</h3>
-                            <div id="log-display-${dayIndex}" class="mt-2 text-sm text-gray-400">No entry for this day.</div>
-                        </div>
-                        <div id="log-form-${dayIndex}" class="log-entry-form">
-                            <div class="space-y-4">
-                                <div>
-                                    <label class="font-semibold text-gray-300 text-sm">Overall Feeling:</label>
-                                    <div data-metric="feeling" class="flex justify-around items-center text-2xl mt-2">
-                                        <span data-value="1" class="rating-emoji">😞</span>
-                                        <span data-value="2" class="rating-emoji">😐</span>
-                                        <span data-value="3" class="rating-emoji">🙂</span>
-                                        <span data-value="4" class="rating-emoji">😊</span>
-                                        <span data-value="5" class="rating-emoji">😁</span>
-                                    </div>
-                                </div>
-                                <div>
-                                    <label class="font-semibold text-gray-300 text-sm">Swelling / Inflammation:</label>
-                                    <div data-metric="swelling" class="flex justify-between items-center mt-2 space-x-1">
-                                        <div data-value="1" class="rating-bar flex-1 h-3 bg-gray-600 rounded-l-lg"></div>
-                                        <div data-value="2" class="rating-bar flex-1 h-3 bg-gray-600"></div>
-                                        <div data-value="3" class="rating-bar flex-1 h-3 bg-gray-600"></div>
-                                        <div data-value="4" class="rating-bar flex-1 h-3 bg-gray-600"></div>
-                                        <div data-value="5" class="rating-bar flex-1 h-3 bg-gray-600 rounded-r-lg"></div>
-                                    </div>
-                                </div>
-                                <div>
-                                    <label class="font-semibold text-gray-300 text-sm">Scar Appearance:</label>
-                                    <div data-metric="scar" class="flex justify-between items-center mt-2 space-x-1">
-                                        <div data-value="1" class="rating-bar flex-1 h-3 bg-gray-600 rounded-l-lg"></div>
-                                        <div data-value="2" class="rating-bar flex-1 h-3 bg-gray-600"></div>
-                                        <div data-value="3" class="rating-bar flex-1 h-3 bg-gray-600"></div>
-                                        <div data-value="4" class="rating-bar flex-1 h-3 bg-gray-600"></div>
-                                        <div data-value="5" class="rating-bar flex-1 h-3 bg-gray-600 rounded-r-lg"></div>
-                                    </div>
-                                </div>
-                                <div>
-                                    <label for="notes-${dayIndex}" class="font-semibold text-gray-300 text-sm">Notes:</label>
-                                    <textarea id="notes-${dayIndex}" class="w-full bg-gray-700 text-gray-200 rounded-md p-2 mt-2 h-24 border border-gray-600 focus:ring-2 focus:ring-blue-500 focus:border-blue-500"></textarea>
-                                </div>
-                                <button data-dayindex="${dayIndex}" class="save-log-btn w-full bg-blue-600 hover:bg-blue-500 text-white font-bold py-2 px-4 rounded-lg transition-colors">Save Log</button>
-                            </div>
-                        </div>
-                        <button data-dayindex="${dayIndex}" class="toggle-log-form-btn mt-auto text-sm text-blue-400 hover:text-blue-300 self-start">Add / Edit Log</button>
-                    `;
-                    logContainer.appendChild(logCard);
-                    currentDate.setDate(currentDate.getDate() + 1);
-                    dayCounter++;
-                }
-                setupLogEventListeners();
+    document.querySelectorAll("#protocol-view .compound-link").forEach(link => {
+        link.addEventListener("click", (e) => {
+            e.preventDefault();
+            openModal(link.dataset.key);
+        });
+    });
+}
             }
 
             function setupLogEventListeners() {
                 document.querySelectorAll('.toggle-log-form-btn').forEach(btn => {
-                    btn.addEventListener('click', () => {
-                        const form = document.getElementById(`log-form-${btn.dataset.dayindex}`);
-                        form.classList.toggle('open');
-                        btn.textContent = form.classList.contains('open') ? 'Close' : 'Add / Edit Log';
-                    });
-                });
-
                 document.querySelectorAll('.rating-emoji').forEach(emoji => {
                     emoji.addEventListener('click', () => {
                         const parent = emoji.parentElement;
