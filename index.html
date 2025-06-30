@@ -126,24 +126,19 @@
 
     <!-- Firebase SDK -->
     <script type="module">
-          // Import the functions you need from the SDKs you need
-          import { initializeApp } from "https://www.gstatic.com/firebasejs/11.9.1/firebase-app.js";
-          import { getAnalytics } from "https://www.gstatic.com/firebasejs/11.9.1/firebase-analytics.js";
-          // TODO: Add SDKs for Firebase products that you want to use
-          // https://firebase.google.com/docs/web/setup#available-libraries
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.9.1/firebase-app.js";
+        import { getFirestore, doc, setDoc, onSnapshot } from "https://www.gstatic.com/firebasejs/11.9.1/firebase-firestore.js";
 
-          // Your web app's Firebase configuration
-          // For Firebase JS SDK v7.20.0 and later, measurementId is optional
-          const firebaseConfig = {
-            apiKey: "AIzaSyBvOuLfBr1-faAK7RC5QkgD6hxhD9oWaP0",
-            authDomain: "post-surgery-recovery-plan.firebaseapp.com",
-            projectId: "post-surgery-recovery-plan",
-            storageBucket: "post-surgery-recovery-plan.firebasestorage.app",
-            messagingSenderId: "640490803020",
-            appId: "1:640490803020:web:07a9a0322792daff0d89e9",
-            measurementId: "G-R4BG49JC7N"
-  };
-            // ---------------------------------------------------------
+        document.addEventListener('DOMContentLoaded', () => {
+            const firebaseConfig = {
+                apiKey: "AIzaSyBvOuLfBr1-faAK7RC5QkgD6hxhD9oWaP0",
+                authDomain: "post-surgery-recovery-plan.firebaseapp.com",
+                projectId: "post-surgery-recovery-plan",
+                storageBucket: "post-surgery-recovery-plan.appspot.com",
+                messagingSenderId: "640490803020",
+                appId: "1:640490803020:web:07a9a0322792daff0d89e9",
+                measurementId: "G-R4BG49JC7N"
+            };
 
             const appData = {
                 checklist: { startDate: '2025-07-12', endDate: '2025-09-30', phases: [{ name: "Phase I", start: 0, end: 13, class: 'day-card' },{ name: "Phase II", start: 14, end: 41, class: 'phase-2' },{ name: "Phase III", start: 42, end: 80, class: 'phase-3' }], items: { "bpc-157": { key: "bpc-157", name: "BPC-157", dose: "400mcg", inj: "12 units", time: "AM", freq: "daily", phases: [1, 2, 3] }, "bpc-157-pm": { key: "bpc-157", name: "BPC-157", dose: "400mcg", inj: "12 units", time: "PM", freq: "daily", phases: [1, 2, 3] }, "tb-500": { key: "tb-500", name: "TB-500", dose: "1mg", inj: "60 units", time: "Any", freq: "daily", phases: [1, 2, 3] }, "kpv": { key: "kpv", name: "KPV (Injectable)", dose: "400mcg", inj: "12 units", time: "AM", freq: "daily", phases: [1] }, "kpv-pm": { key: "kpv", name: "KPV (Injectable)", dose: "400mcg", inj: "12 units", time: "PM", freq: "daily", phases: [1] }, "oxandrolone": { key: "oxandrolone", name: "Oxandrolone", dose: "6.25mg", time: "AM", freq: "daily", phases: [1, 2, 3] }, "oxandrolone-pm": { key: "oxandrolone", name: "Oxandrolone", dose: "6.25mg", time: "PM", freq: "daily", phases: [1, 2, 3] }, "collagen": { key: "collagen", name: "Multi-Collagen Powder", dose: "15g", time: "AM", freq: "daily", phases: [1, 2, 3] }, "collagen-pm": { key: "collagen", name: "Multi-Collagen Powder", dose: "15g", time: "PM", freq: "daily", phases: [1, 2, 3] }, "vit-c": { key: "vit-c", name: "Vitamin C", dose: "1g", time: "AM Meal", freq: "daily", phases: [1, 2, 3] }, "vit-c-pm": { key: "vit-c", name: "Vitamin C", dose: "1g", time: "PM Meal", freq: "daily", phases: [1, 2, 3] }, "vit-d": { key: "vit-d", name: "Vitamin D3", dose: "5,000 IU", time: "With Meal", freq: "daily", phases: [1, 2, 3] }, "ha-oral": { key: "ha", name: "Hyaluronic Acid (Oral)", dose: "200mg", time: "Any", freq: "daily", phases: [1, 2, 3] }, "ghk-cu": { key: "ghk-cu", name: "GHK-Cu (Injectable)", dose: "1mg", inj: "4 units", time: "PM", freq: "daily", phases: [2, 3] }, "hgh": { key: "hgh", name: "HGH", dose: "1.5 IU", inj: "11 units", time: "AM", freq: "daily", phases: [2, 3] }, "hgh-pm": { key: "hgh", name: "HGH", dose: "1.5 IU", inj: "11 units", time: "PM", freq: "daily", phases: [2, 3] }, "rlt": { key: "rlt", name: "Red Light Therapy", dose: "10-15 min", time: "Any", freq: "eod", phases: [2, 3] }, "retatrutide-p2": { key: "retatrutide", name: "Retatrutide", dose: "2mg", inj: "60 units", time: "Any", freq: "weekly", phases: [2], startWeek: 3 }, "retatrutide-p3": { key: "retatrutide", name: "Retatrutide", dose: "4mg", inj: "120 units (split)", time: "Any", freq: "weekly", phases: [3] } } },
@@ -153,7 +148,7 @@
             let db;
             let checklistDocRef;
             let unsubscribe;
-
+            
             const mainApp = document.getElementById('main-app');
             const appLoader = document.getElementById('app-loader');
             const loaderText = document.getElementById('loader-text');
@@ -165,8 +160,8 @@
 
             function runApp() {
                 if (firebaseConfig.apiKey === "YOUR_API_KEY") {
-                    loaderText.textContent = "Firebase config missing in HTML file.";
                     appLoader.classList.remove('hidden');
+                    loaderText.textContent = "Firebase config missing in HTML file.";
                     return;
                 }
                 const app = initializeApp(firebaseConfig);
