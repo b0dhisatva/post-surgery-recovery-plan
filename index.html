@@ -36,6 +36,11 @@
         .modal { transition: opacity 0.25s ease, visibility 0.25s ease; }
         .modal-content { transition: transform 0.25s ease; }
         #app-loader { transition: opacity 0.3s ease-in-out; }
+        .rating-emoji { transition: transform 0.2s, filter 0.2s; cursor: pointer; filter: grayscale(80%); transform: scale(1); }
+        .rating-emoji.selected, .rating-emoji:hover { filter: grayscale(0%); transform: scale(1.15); }
+        .rating-bar { transition: background-color 0.2s; cursor: pointer; }
+        .log-entry-form { max-height: 0; overflow: hidden; transition: max-height 0.5s ease-in-out, padding 0.5s ease-in-out; }
+        .log-entry-form.open { max-height: 500px; padding-top: 1rem; padding-bottom: 1rem; }
     </style>
 </head>
 <body class="bg-gray-900 text-gray-300">
@@ -57,6 +62,7 @@
                     </div>
                     <nav class="flex items-center space-x-6 mt-4 sm:mt-0">
                         <button data-tab="checklist" class="main-tab font-medium text-gray-300 px-1 py-2 text-base active">Daily Checklist</button>
+                        <button data-tab="log" class="main-tab font-medium text-gray-300 px-1 py-2 text-base">Log</button>
                         <button data-tab="protocol" class="main-tab font-medium text-gray-300 px-1 py-2 text-base">Full Protocol</button>
                     </nav>
                 </div>
@@ -73,6 +79,10 @@
                     </div>
                 </div>
                 <div id="checklist-container" class="p-4 sm:p-6 lg:p-8 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6"></div>
+            </div>
+
+            <div id="log-view" class="tab-content hidden">
+                 <div id="log-container" class="p-4 sm:p-6 lg:p-8 grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6"></div>
             </div>
 
             <div id="protocol-view" class="tab-content hidden p-4 sm:p-6 lg:p-8">
@@ -157,7 +167,9 @@
 
             let db;
             let checklistDocRef;
-            let unsubscribe;
+            let logsDocRef;
+            let unsubscribeChecklist;
+            let unsubscribeLogs;
             let checkboxToUncheck = null;
             
             const mainApp = document.getElementById('main-app');
@@ -181,6 +193,7 @@
                 const app = initializeApp(firebaseConfig);
                 db = getFirestore(app);
                 checklistDocRef = doc(db, "recoveryState", "checklist");
+                logsDocRef = doc(db, "recoveryState", "logs");
 
                 startApp();
             }
@@ -189,19 +202,22 @@
                 appLoader.classList.remove('hidden');
                 initializeProtocolView();
                 initializeChecklist();
+                initializeLogView();
                 handleTabSwitching();
                 setupUncheckModalListeners();
                 
-                unsubscribe = onSnapshot(checklistDocRef, (docSnap) => {
+                unsubscribeChecklist = onSnapshot(checklistDocRef, (docSnap) => {
                     const remoteData = docSnap.exists() ? docSnap.data() : {};
                     updateCheckboxesFromRemote(remoteData);
-                    appLoader.classList.add('opacity-0', 'pointer-events-none');
-                    mainApp.classList.remove('hidden');
-                }, (error) => {
-                    console.error("Firebase connection error:", error);
-                    loaderText.textContent = `Connection Error. Check console & Firebase rules.`
-                    appLoader.classList.remove('hidden');
                 });
+                
+                unsubscribeLogs = onSnapshot(logsDocRef, (docSnap) => {
+                    const remoteData = docSnap.exists() ? docSnap.data() : {};
+                    updateLogsFromRemote(remoteData);
+                });
+
+                appLoader.classList.add('opacity-0', 'pointer-events-none');
+                mainApp.classList.remove('hidden');
             }
             
             function updateCheckboxStateInFirestore(id, data) {
@@ -244,15 +260,13 @@
 
             function handleCheckboxClick(e) {
                 const checkbox = e.target;
-                // Correct logic: if it's currently checked, the user wants to uncheck it.
-                if (checkbox.checked) {
-                    e.preventDefault(); // Prevent the uncheck action immediately.
-                    checkboxToUncheck = checkbox;
-                    uncheckModal.classList.remove('invisible', 'opacity-0');
-                } else {
-                     // If it's not checked, the user is checking it for the first time.
+                if (!checkbox.checked) {
                     const timestamp = new Date().toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit' });
                     updateCheckboxStateInFirestore(checkbox.id, { checked: true, ts: timestamp });
+                } else {
+                    e.preventDefault();
+                    checkboxToUncheck = checkbox;
+                    uncheckModal.classList.remove('invisible', 'opacity-0');
                 }
             }
             
@@ -383,6 +397,194 @@
             function handleTabSwitching() {
                 document.querySelectorAll('.main-tab').forEach(tab => { tab.addEventListener('click', () => { document.querySelectorAll('.main-tab').forEach(t => t.classList.remove('active')); tab.classList.add('active'); document.querySelectorAll('.tab-content').forEach(content => content.classList.add('hidden')); document.getElementById(`${tab.dataset.tab}-view`).classList.remove('hidden'); }); });
             }
+            
+            function initializeLogView() {
+                const logContainer = document.getElementById('log-container');
+                logContainer.innerHTML = '';
+                const { startDate: start, endDate: end } = appData.checklist;
+                const startDate = new Date(start + 'T00:00:00');
+                const endDate = new Date(end + 'T00:00:00');
+                let currentDate = new Date(startDate);
+                let dayCounter = 0;
+
+                while(currentDate <= endDate) {
+                    const dayIndex = `day-${dayCounter}`;
+                    const dateString = currentDate.toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric' });
+                    
+                    const logCard = document.createElement('div');
+                    logCard.className = 'bg-gray-800 rounded-lg shadow-lg p-4 flex flex-col space-y-4';
+                    logCard.id = `log-${dayIndex}`;
+                    logCard.innerHTML = `
+                        <div>
+                            <h3 class="font-bold text-lg text-white">${dateString}</h3>
+                            <div id="log-display-${dayIndex}" class="mt-2 text-sm text-gray-400">No entry for this day.</div>
+                        </div>
+                        <div id="log-form-${dayIndex}" class="log-entry-form">
+                            <div class="space-y-4">
+                                <div>
+                                    <label class="font-semibold text-gray-300 text-sm">Overall Feeling:</label>
+                                    <div data-metric="feeling" class="flex justify-around items-center text-2xl mt-2">
+                                        <span data-value="1" class="rating-emoji">😞</span>
+                                        <span data-value="2" class="rating-emoji">😐</span>
+                                        <span data-value="3" class="rating-emoji">🙂</span>
+                                        <span data-value="4" class="rating-emoji">😊</span>
+                                        <span data-value="5" class="rating-emoji">😁</span>
+                                    </div>
+                                </div>
+                                <div>
+                                    <label class="font-semibold text-gray-300 text-sm">Swelling / Inflammation:</label>
+                                    <div data-metric="swelling" class="flex justify-between items-center mt-2 space-x-1">
+                                        <div data-value="1" class="rating-bar flex-1 h-3 bg-gray-600 rounded-l-lg"></div>
+                                        <div data-value="2" class="rating-bar flex-1 h-3 bg-gray-600"></div>
+                                        <div data-value="3" class="rating-bar flex-1 h-3 bg-gray-600"></div>
+                                        <div data-value="4" class="rating-bar flex-1 h-3 bg-gray-600"></div>
+                                        <div data-value="5" class="rating-bar flex-1 h-3 bg-gray-600 rounded-r-lg"></div>
+                                    </div>
+                                </div>
+                                <div>
+                                    <label class="font-semibold text-gray-300 text-sm">Scar Appearance:</label>
+                                    <div data-metric="scar" class="flex justify-between items-center mt-2 space-x-1">
+                                        <div data-value="1" class="rating-bar flex-1 h-3 bg-gray-600 rounded-l-lg"></div>
+                                        <div data-value="2" class="rating-bar flex-1 h-3 bg-gray-600"></div>
+                                        <div data-value="3" class="rating-bar flex-1 h-3 bg-gray-600"></div>
+                                        <div data-value="4" class="rating-bar flex-1 h-3 bg-gray-600"></div>
+                                        <div data-value="5" class="rating-bar flex-1 h-3 bg-gray-600 rounded-r-lg"></div>
+                                    </div>
+                                </div>
+                                <div>
+                                    <label for="notes-${dayIndex}" class="font-semibold text-gray-300 text-sm">Notes:</label>
+                                    <textarea id="notes-${dayIndex}" class="w-full bg-gray-700 text-gray-200 rounded-md p-2 mt-2 h-24 border border-gray-600 focus:ring-2 focus:ring-blue-500 focus:border-blue-500"></textarea>
+                                </div>
+                                <button data-dayindex="${dayIndex}" class="save-log-btn w-full bg-blue-600 hover:bg-blue-500 text-white font-bold py-2 px-4 rounded-lg transition-colors">Save Log</button>
+                            </div>
+                        </div>
+                        <button data-dayindex="${dayIndex}" class="toggle-log-form-btn mt-auto text-sm text-blue-400 hover:text-blue-300 self-start">Add / Edit Log</button>
+                    `;
+                    logContainer.appendChild(logCard);
+                    currentDate.setDate(currentDate.getDate() + 1);
+                    dayCounter++;
+                }
+                setupLogEventListeners();
+            }
+
+            function setupLogEventListeners() {
+                document.querySelectorAll('.toggle-log-form-btn').forEach(btn => {
+                    btn.addEventListener('click', () => {
+                        const form = document.getElementById(`log-form-${btn.dataset.dayindex}`);
+                        form.classList.toggle('open');
+                        btn.textContent = form.classList.contains('open') ? 'Close' : 'Add / Edit Log';
+                    });
+                });
+
+                document.querySelectorAll('.rating-emoji').forEach(emoji => {
+                    emoji.addEventListener('click', () => {
+                        const parent = emoji.parentElement;
+                        parent.querySelectorAll('.rating-emoji').forEach(e => e.classList.remove('selected'));
+                        emoji.classList.add('selected');
+                        parent.dataset.rating = emoji.dataset.value;
+                    });
+                });
+
+                document.querySelectorAll('[data-metric] .rating-bar').forEach(bar => {
+                    bar.addEventListener('click', () => {
+                        const parent = bar.parentElement;
+                        const value = bar.dataset.value;
+                        const bars = parent.querySelectorAll('.rating-bar');
+                        const colors = ['bg-green-500', 'bg-yellow-500', 'bg-orange-500', 'bg-red-500', 'bg-red-700'];
+                        
+                        bars.forEach((b, i) => {
+                            if (i < value) {
+                                b.className = `rating-bar flex-1 h-3 ${colors[i]} transition-colors`;
+                            } else {
+                                b.className = 'rating-bar flex-1 h-3 bg-gray-600 transition-colors';
+                            }
+                        });
+                        // Add rounded corners
+                        bars[0].classList.add('rounded-l-lg');
+                        bars[bars.length - 1].classList.add('rounded-r-lg');
+
+                        parent.dataset.rating = value;
+                    });
+                });
+
+                document.querySelectorAll('.save-log-btn').forEach(btn => {
+                    btn.addEventListener('click', () => {
+                        const dayIndex = btn.dataset.dayindex;
+                        const form = document.getElementById(`log-form-${dayIndex}`);
+                        const logData = {
+                            feeling: form.querySelector('[data-metric="feeling"]').dataset.rating || null,
+                            swelling: form.querySelector('[data-metric="swelling"]').dataset.rating || null,
+                            scar: form.querySelector('[data-metric="scar"]').dataset.rating || null,
+                            notes: form.querySelector(`#notes-${dayIndex}`).value,
+                            timestamp: new Date().toISOString()
+                        };
+                        updateLogStateInFirestore(dayIndex, logData);
+                         form.classList.remove('open');
+                         document.querySelector(`.toggle-log-form-btn[data-dayindex="${dayIndex}"]`).textContent = 'Add / Edit Log';
+                    });
+                });
+            }
+
+            function updateLogStateInFirestore(dayIndex, data) {
+                 const updateData = { [dayIndex]: data };
+                 setDoc(logsDocRef, updateData, { merge: true });
+            }
+
+            function updateLogsFromRemote(remoteData) {
+                const ratingColors = { '1': 'bg-green-500', '2': 'bg-yellow-500', '3': 'bg-orange-500', '4': 'bg-red-500', '5': 'bg-red-700' };
+                const feelingEmojis = { '1': '😞', '2': '😐', '3': '🙂', '4': '😊', '5': '😁' };
+                const ratingLabels = { '1': 'Very Low', '2': 'Low', '3': 'Moderate', '4': 'High', '5': 'Very High' };
+
+                for (const dayIndex in remoteData) {
+                    const logData = remoteData[dayIndex];
+                    const displayEl = document.getElementById(`log-display-${dayIndex}`);
+                    const formEl = document.getElementById(`log-form-${dayIndex}`);
+
+                    if (displayEl) {
+                        if (logData && logData.timestamp) {
+                            let displayHTML = '<ul class="space-y-1">';
+                            if (logData.feeling) displayHTML += `<li>Feeling: <span class="text-xl">${feelingEmojis[logData.feeling]}</span></li>`;
+                            if (logData.swelling) displayHTML += `<li>Swelling: <span class="font-semibold text-gray-200">${ratingLabels[logData.swelling]}</span></li>`;
+                            if (logData.scar) displayHTML += `<li>Scar Appearance: <span class="font-semibold text-gray-200">${ratingLabels[logData.scar]}</span></li>`;
+                            if (logData.notes) displayHTML += `<li>Notes: <p class="whitespace-pre-wrap italic text-gray-400">${logData.notes}</p></li>`;
+                            displayHTML += '</ul>';
+                            displayEl.innerHTML = displayHTML;
+                        } else {
+                            displayEl.innerHTML = 'No entry for this day.';
+                        }
+                    }
+
+                    if (formEl && logData) {
+                        const feelingContainer = formEl.querySelector('[data-metric="feeling"]');
+                        if (logData.feeling) {
+                            feelingContainer.dataset.rating = logData.feeling;
+                            feelingContainer.querySelectorAll('.rating-emoji').forEach(e => {
+                                e.classList.toggle('selected', e.dataset.value === logData.feeling);
+                            });
+                        }
+                        const swellingContainer = formEl.querySelector('[data-metric="swelling"]');
+                        if(logData.swelling) {
+                             swellingContainer.dataset.rating = logData.swelling;
+                             swellingContainer.querySelectorAll('.rating-bar').forEach((b, i) => {
+                                 b.className = `rating-bar flex-1 h-3 ${i < logData.swelling ? ratingColors[i+1] : 'bg-gray-600'} transition-colors`;
+                             });
+                             swellingContainer.querySelector('.rating-bar').classList.add('rounded-l-lg');
+                             swellingContainer.querySelector('.rating-bar:last-child').classList.add('rounded-r-lg');
+                        }
+                         const scarContainer = formEl.querySelector('[data-metric="scar"]');
+                        if(logData.scar) {
+                             scarContainer.dataset.rating = logData.scar;
+                             scarContainer.querySelectorAll('.rating-bar').forEach((b, i) => {
+                                 b.className = `rating-bar flex-1 h-3 ${i < logData.scar ? ratingColors[i+1] : 'bg-gray-600'} transition-colors`;
+                             });
+                             scarContainer.querySelector('.rating-bar').classList.add('rounded-l-lg');
+                             scarContainer.querySelector('.rating-bar:last-child').classList.add('rounded-r-lg');
+                        }
+                        formEl.querySelector(`#notes-${dayIndex}`).value = logData.notes || '';
+                    }
+                }
+            }
+            
             modalClose.addEventListener('click', closeModal); modal.addEventListener('click', (e) => { if (e.target === modal) closeModal(); }); document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeModal(); });
             
             runApp();
