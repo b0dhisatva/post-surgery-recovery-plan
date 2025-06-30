@@ -12,16 +12,15 @@
         tailwind.config = {
             theme: {
                 extend: {
-    }
                     colors: {
                         'gray-900': '#111827', 'gray-800': '#1F2937', 'gray-700': '#374151',
                         'gray-600': '#4B5563', 'gray-500': '#6B7280', 'gray-400': '#9CA3AF',
                         'gray-300': '#D1D5DB', 'gray-200': '#E5E7EB', 'blue-500': '#3B82F6',
-                        'blue-400': '#60A5FA',
+                        'blue-400': '#60A5FA'
                     }
                 }
             }
-        }
+        };
     </script>
     <style>
         body { font-family: 'Inter', sans-serif; background-color: #111827; color: #D1D5DB; }
@@ -96,7 +95,7 @@
                         <div class="flex items-center"><div class="w-1 h-4 bg-emerald-500 mr-2"></div><span>Injectable</span></div>
                         <div class="flex items-center"><div class="w-1 h-4 bg-blue-500 mr-2"></div><span>Oral</span></div>
                     </div>
-                    <div id="protocol-table" class="protocol-phase-content"></div>
+                    <div id="protocol-table"></div>
                 </section>
                 <section id="library" class="mb-16 scroll-mt-20">
                     <h2 class="text-3xl font-bold mb-2 text-white">Compound Library</h2>
@@ -624,18 +623,15 @@ const appData = {
             }
             function populateProtocolTables() {
                 const { protocol } = appData;
-        const tableContainer = document.getElementById('protocol-table');
-        let tableRowsHTML = '';
-        for (const key in protocol) {
-            const compound = protocol[key];
-            const pData = (compound.phases && (compound.phases.phase2 || compound.phases.phase1 || compound.phases.phase3)) || {};
-            if (compound.phases) {
-                const injectable = injectableKeys.has(key);
-                const lineClass = injectable ? 'bg-emerald-500' : 'bg-blue-500';
-                tableRowsHTML += `<tr class="hover:bg-gray-700/50"><td class="p-3 font-medium"><span class="inline-block w-1 h-4 ${lineClass} mr-2"></span><button data-key="${key}" class="compound-link text-blue-400 hover:text-blue-300 hover:underline">${compound.name}</button></td><td class="p-3 text-gray-300">${pData.dosage}</td><td class="p-3 text-gray-300">${pData.freq}</td><td class="p-3 text-gray-300">${pData.time}</td><td class="p-3 text-gray-300 font-mono">${pData.injectionAmount || '—'}</td></tr>`;
-            }
-        }
-        tableContainer.innerHTML = `<div class="bg-gray-800 p-4 sm:p-6 rounded-lg shadow-lg"><div class="overflow-x-auto"><table class="w-full table-auto text-left text-sm"><thead class="bg-gray-700/50 text-gray-300"><tr><th class="p-3 font-semibold">Compound</th><th class="p-3 font-semibold">Dosage</th><th class="p-3 font-semibold">Frequency</th><th class="p-3 font-semibold">Time of Day</th><th class="p-3 font-semibold">Inj. Amount (units)</th></tr></thead><tbody class="divide-y divide-gray-700">${tableRowsHTML}</tbody></table></div></div>`;
+                const tableContainer = document.getElementById('protocol-table');
+                let tableRowsHTML = '';
+                for (const key in protocol) {
+                    const compound = protocol[key];
+                    const injectable = injectableKeys.has(key);
+                    const lineClass = injectable ? 'bg-emerald-500' : 'bg-blue-500';
+                    tableRowsHTML += `<tr class="hover:bg-gray-700/50"><td class="p-3 font-medium"><span class="inline-block w-1 h-4 ${lineClass} mr-2"></span><button data-key="${key}" class="compound-link text-blue-400 hover:text-blue-300 hover:underline">${compound.name}</button></td><td class="p-3 text-gray-300">${compound.dosage}</td><td class="p-3 text-gray-300">${compound.freq}</td><td class="p-3 text-gray-300">${compound.time}</td><td class="p-3 text-gray-300 font-mono">${compound.injectionAmount || '—'}</td></tr>`;
+                }
+                tableContainer.innerHTML = `<div class="bg-gray-800 p-4 sm:p-6 rounded-lg shadow-lg"><div class="overflow-x-auto"><table class="w-full table-auto text-left text-sm"><thead class="bg-gray-700/50 text-gray-300"><tr><th class="p-3 font-semibold">Compound</th><th class="p-3 font-semibold">Dosage</th><th class="p-3 font-semibold">Frequency</th><th class="p-3 font-semibold">Time of Day</th><th class="p-3 font-semibold">Inj. Amount (units)</th></tr></thead><tbody class="divide-y divide-gray-700">${tableRowsHTML}</tbody></table></div></div>`;
             }
             function populateLibrary() {
                 const libraryGrid = document.getElementById('library-grid'); libraryGrid.innerHTML = '';
@@ -652,7 +648,14 @@ const appData = {
                 modalBody.innerHTML = `<p class="text-gray-300 mb-4">${compound.info.summary}</p><h4 class="font-bold text-lg text-white mb-2">Mechanism of Action</h4><p class="text-gray-300">${compound.info.mechanism}</p>${notesHtml}`; modal.classList.remove('invisible', 'opacity-0'); modalContent.classList.remove('scale-95');
             }
             function setupProtocolEventListeners() {
-                document.querySelectorAll('#protocol-view .compound-link').forEach(link => { link.addEventListener('click', (e) => { e.preventDefault(); openModal(link.dataset.key); }); });
+                document.querySelectorAll('#protocol-view .compound-link').forEach(link => {
+                    link.addEventListener('click', (e) => {
+                        e.preventDefault();
+                        openModal(link.dataset.key);
+                    });
+                });
+            }
+
             function handleTabSwitching() {
                 document.querySelectorAll('.main-tab').forEach(tab => { tab.addEventListener('click', () => { document.querySelectorAll('.main-tab').forEach(t => t.classList.remove('active')); tab.classList.add('active'); document.querySelectorAll('.tab-content').forEach(content => content.classList.add('hidden')); document.getElementById(`${tab.dataset.tab}-view`).classList.remove('hidden'); }); });
             }
