@@ -260,14 +260,16 @@
                 progressBar.style.width = `${progressPercentage}%`;
             }
 
-            function handleCheckboxClick(e) {
+            function handleCheckboxChange(e) {
                 const checkbox = e.target;
-                if (!checkbox.checked) {
+                if (checkbox.checked) {
                     const timestamp = new Date().toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit' });
                     updateCheckboxStateInFirestore(checkbox.id, { checked: true, ts: timestamp });
+                    const dayCard = checkbox.closest('.day-card');
+                    if(dayCard) updateDayProgress(dayCard);
                 } else {
-                    e.preventDefault();
                     checkboxToUncheck = checkbox;
+                    checkbox.checked = true;
                     uncheckModal.classList.remove('invisible', 'opacity-0');
                 }
             }
@@ -285,7 +287,10 @@
 
                 confirmUncheckBtn.addEventListener('click', () => {
                     if (checkboxToUncheck) {
+                        checkboxToUncheck.checked = false;
                         updateCheckboxStateInFirestore(checkboxToUncheck.id, { checked: false, ts: null });
+                        const dayCard = checkboxToUncheck.closest('.day-card');
+                        if(dayCard) updateDayProgress(dayCard);
                     }
                     closeUncheckModal();
                 });
@@ -358,7 +363,7 @@
                     checklistContainer.appendChild(dayCard);
                     
                     dayCard.querySelectorAll('input[type="checkbox"]').forEach(checkbox => {
-                        checkbox.addEventListener('click', handleCheckboxClick);
+                        checkbox.addEventListener('change', handleCheckboxChange);
                     });
                     
                     currentDate.setDate(currentDate.getDate() + 1);
