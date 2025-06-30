@@ -96,9 +96,9 @@
                     <h2 class="text-3xl font-bold mb-2 text-white">Integrated Protocol Timeline</h2>
                     <p class="mb-6 text-gray-400 max-w-3xl">This section presents the core of your recovery plan...</p>
                     <div class="mb-6"><div class="flex flex-wrap border-b border-gray-700">
-                            <button data-phase="phase1" class="phase-tab px-4 py-2 font-medium text-gray-300 hover:bg-gray-700 active">Phase I (Wk 1-2)</button>
-                            <button data-phase="phase2" class="phase-tab px-4 py-2 font-medium text-gray-300 hover:bg-gray-700">Phase II (Wk 3-6)</button>
-                            <button data-phase="phase3" class="phase-tab px-4 py-2 font-medium text-gray-300 hover:bg-gray-700">Phase III (Wk 7-11)</button>
+                            <button data-phase="phase1" class="phase-tab px-4 py-2 font-medium text-gray-300 hover:bg-gray-700 active">Phase I</button>
+                            <button data-phase="phase2" class="phase-tab px-4 py-2 font-medium text-gray-300 hover:bg-gray-700">Phase II</button>
+                            <button data-phase="phase3" class="phase-tab px-4 py-2 font-medium text-gray-300 hover:bg-gray-700">Phase III</button>
                     </div></div>
                     <div class="flex items-center space-x-4 text-sm text-gray-400 mb-4">
                         <div class="flex items-center"><div class="w-1 h-4 bg-emerald-500 mr-2"></div><span>Injectable</span></div>
@@ -423,10 +423,30 @@
                  populateProtocolTables(); populateLibrary(); populateRiskTable(); setupProtocolEventListeners();
             }
             function populateProtocolTables() {
-                const { protocol } = appData; const phaseContainers = { phase1: document.getElementById('protocol-phase1'), phase2: document.getElementById('protocol-phase2'), phase3: document.getElementById('protocol-phase3'), };
-                for (const phase in phaseContainers) { let tableRowsHTML = ''; for (const key in protocol) { const compound = protocol[key]; if (compound.phases[phase]) { const pData = compound.phases[phase]; const injectable = injectableKeys.has(key); const lineClass = injectable ? 'bg-emerald-500' : 'bg-blue-500';
-                tableRowsHTML += `<tr class="hover:bg-gray-700/50"><td class="p-3 font-medium"><span class="inline-block w-1 h-4 ${lineClass} mr-2"></span><button data-key="${key}" class="compound-link text-blue-400 hover:text-blue-300 hover:underline">${compound.name}</button></td><td class="p-3 text-gray-300">${pData.dosage}</td><td class="p-3 text-gray-300">${pData.freq}</td><td class="p-3 text-gray-300">${pData.time}</td><td class="p-3 text-gray-300 font-mono">${pData.injectionAmount || '—'}</td></tr>`; } }
-                phaseContainers[phase].innerHTML = `<div class="bg-gray-800 p-4 sm:p-6 rounded-lg shadow-lg"><div class="overflow-x-auto"><table class="w-full table-auto text-left text-sm"><thead class="bg-gray-700/50 text-gray-300"><tr><th class="p-3 font-semibold">Compound</th><th class="p-3 font-semibold">Dosage</th><th class="p-3 font-semibold">Frequency</th><th class="p-3 font-semibold">Time of Day</th><th class="p-3 font-semibold">Inj. Amount (units)</th></tr></thead><tbody class="divide-y divide-gray-700">${tableRowsHTML}</tbody></table></div></div>`; }
+                const { protocol } = appData;
+                const phaseContainers = {
+                    phase1: document.getElementById('protocol-phase1'),
+                    phase2: document.getElementById('protocol-phase2'),
+                    phase3: document.getElementById('protocol-phase3'),
+                };
+                const phaseWeeks = {
+                    phase1: 'Weeks 1-2',
+                    phase2: 'Weeks 3-6',
+                    phase3: 'Weeks 7-11',
+                };
+                for (const phase in phaseContainers) {
+                    let tableRowsHTML = '';
+                    for (const key in protocol) {
+                        const compound = protocol[key];
+                        if (compound.phases[phase]) {
+                            const pData = compound.phases[phase];
+                            const injectable = injectableKeys.has(key);
+                            const lineClass = injectable ? 'bg-emerald-500' : 'bg-blue-500';
+                            tableRowsHTML += `<tr class="hover:bg-gray-700/50"><td class="p-3 font-medium"><span class="inline-block w-1 h-4 ${lineClass} mr-2"></span><button data-key="${key}" class="compound-link text-blue-400 hover:text-blue-300 hover:underline">${compound.name}</button></td><td class="p-3 text-gray-300">${pData.dosage}</td><td class="p-3 text-gray-300">${pData.freq}</td><td class="p-3 text-gray-300">${pData.time}</td><td class="p-3 text-gray-300 font-mono">${pData.injectionAmount || '—'}</td></tr>`;
+                        }
+                    }
+                    phaseContainers[phase].innerHTML = `<p class="text-gray-400 text-sm mb-2">${phaseWeeks[phase]}</p><div class="bg-gray-800 p-4 sm:p-6 rounded-lg shadow-lg"><div class="overflow-x-auto"><table class="w-full table-auto text-left text-sm"><thead class="bg-gray-700/50 text-gray-300"><tr><th class="p-3 font-semibold">Compound</th><th class="p-3 font-semibold">Dosage</th><th class="p-3 font-semibold">Frequency</th><th class="p-3 font-semibold">Time of Day</th><th class="p-3 font-semibold">Inj. Amount (units)</th></tr></thead><tbody class="divide-y divide-gray-700">${tableRowsHTML}</tbody></table></div></div>`;
+                }
             }
             function populateLibrary() {
                 const libraryGrid = document.getElementById('library-grid'); libraryGrid.innerHTML = '';
